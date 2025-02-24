@@ -1,8 +1,8 @@
-import js from '@eslint/js'
-import globals from 'globals'
-import reactHooks from 'eslint-plugin-react-hooks'
-import reactRefresh from 'eslint-plugin-react-refresh'
-import tseslint from 'typescript-eslint'
+import js from '@eslint/js';
+import globals from 'globals';
+import reactHooks from 'eslint-plugin-react-hooks';
+import reactRefresh from 'eslint-plugin-react-refresh';
+import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
   { ignores: ['dist'] },
@@ -19,12 +19,20 @@ export default tseslint.config(
       'react-refresh': reactRefresh,
     },
     rules: {
-      "no-unused-vars": "warn",
+      'no-unused-vars': 'warn',
       ...reactHooks.configs.recommended.rules,
+      ...React.configs['jsx-runtime'].rules,
       'react-refresh/only-export-components': [
         'warn',
         { allowConstantExport: true },
       ],
     },
-  },
-)
+    files: ['**/*.{ts.tsx}'],
+    ...jsxA11y.flatConfigs.recommended,
+    settings: {
+      react: {
+        version: '19.0.0',
+      },
+    },
+  }
+);

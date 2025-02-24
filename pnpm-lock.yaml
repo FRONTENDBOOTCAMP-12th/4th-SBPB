@@ -29,9 +29,6 @@ importers:
       tailwind-merge:
         specifier: ^3.0.2
         version: 3.0.2
-      tailwindcss:
-        specifier: ^4.0.8
-        version: 4.0.8
       zustand:
         specifier: ^5.0.3
         version: 5.0.3(@types/react@19.0.10)(react@19.0.0)
@@ -75,6 +72,9 @@ importers:
       tailwind:
         specifier: ^4.0.0
         version: 4.0.0
+      tailwindcss:
+        specifier: ^4.0.8
+        version: 4.0.8
       typescript:
         specifier: ~5.7.2
         version: 5.7.3
