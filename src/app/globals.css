@@ -1,1 +1,20 @@
 @import 'tailwindcss';
+
+@theme {
+  /* 메인 컬러 */
+  --color-primary: #0d0e0f;
+  /* accent 컬러 */
+  --color-accent: #00c896;
+
+  /* 컨텐츠 primary 컬러 */
+  --color-content-primary: #000000;
+  /* 컨텐츠 secondary 컬러 */
+  --color-content-secondary: #6b6b6b;
+  /* 컨텐츠 tertiary 컬러*/
+  --color-content-tertiary: #a6a6a6;
+
+  /* gray 계열 컬러 피그마대로 수정 */
+  --color-gray-50: #f9f9f9;
+  --color-gray-100: #e1e1e1;
+  --color-gray-200: #c4c4c4;
+}
