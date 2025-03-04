@@ -1,3 +1,5 @@
+import Nav from '@/components/nav-items'
+
 export default function Home() {
-  return <div className="text-3xl">hello</div>
+  return <Nav />
 }
