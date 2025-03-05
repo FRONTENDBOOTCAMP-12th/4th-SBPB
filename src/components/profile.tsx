@@ -41,9 +41,16 @@ const GuestProfile = () => (
 const UserProfile = () => {
   const [profileImage, setProfileImage] = useState<string | null>(null);
 
-  const [nickname, setNickname] = useState('닉네임');
+  const [nickname, setNickname] = useState<string | null>('닉네임');
 
-  const [stats, setStats] = useState({
+  interface StatsTypes {
+    posts: number;
+    photos: number;
+    following: number;
+    followers: number;
+  }
+
+  const [stats, setStats] = useState<StatsTypes>({
     posts: 1000,
     photos: 10000,
     following: 1,
