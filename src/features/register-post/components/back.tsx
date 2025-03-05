@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 
-const PreviousPageButton = () => {
+function BackPageButton() {
   const router = useRouter()
 
   const handleGoBack = () => {
@@ -20,4 +20,4 @@ const PreviousPageButton = () => {
   )
 }
 
-export default PreviousPageButton
+export default BackPageButton
