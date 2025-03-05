@@ -1,11 +1,6 @@
 import Image from 'next/image'
 
-interface UploadImageButtonProps {
-  placeholderSrc: string
-}
-function UploadImageButton({
-  placeholderSrc = '/photo.svg',
-}: UploadImageButtonProps) {
+function UploadImageButton() {
   return (
     <div className="flex items-center justify-center min-h-screen ">
       <div
@@ -13,7 +8,7 @@ function UploadImageButton({
       "
       >
         <Image
-          src={placeholderSrc}
+          src="/photo.svg"
           width={24}
           height={24}
           alt="사진 아이콘"
