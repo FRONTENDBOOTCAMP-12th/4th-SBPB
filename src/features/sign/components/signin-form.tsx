@@ -1,6 +1,6 @@
 import Link from 'next/link';
-import SignInput from './SignInput';
-import SignButton from './SignButton';
+import SignInput from './sign-input';
+import SignButton from './sign-button';
 
 function SignInForm() {
   return (
@@ -8,8 +8,12 @@ function SignInForm() {
       <h1 className="text-white font-semibold text-[1.75rem] self-start">
         로그인
       </h1>
-      <SignInput placeholder="아이디를 입력해주세요" />
-      <SignInput placeholder="비밀번호를 입력해주세요" type="password" />
+      <SignInput name="id" placeholder="아이디를 입력해주세요" />
+      <SignInput
+        name="password"
+        placeholder="비밀번호를 입력해주세요"
+        type="password"
+      />
       <div className="flex justify-end gap-2">
         <Link className="text-white text-xs" href={'#'}>
           아이디 찾기

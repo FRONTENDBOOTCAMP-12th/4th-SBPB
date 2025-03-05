@@ -1,8 +1,8 @@
 'use client';
 
 import Logo from '@/components/logo';
-import SearchAccount from '@/features/sign/components/SearchAccount';
-import SignInForm from '@/features/sign/components/SignInForm';
+import SearchAccount from '@/features/sign/components/search-account';
+import SignInForm from '@/features/sign/components/signin-form';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 
