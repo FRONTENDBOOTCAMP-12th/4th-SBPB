@@ -88,6 +88,5 @@
 @layer base {
   html {
     font-family: var(--font-primary);
-    background: #000;
   }
 }
