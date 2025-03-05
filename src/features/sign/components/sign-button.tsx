@@ -5,6 +5,7 @@ interface SignButtonProps {
   color?: 'black' | 'white';
   useImage?: boolean;
   kindImage?: 'google' | 'kakao' | 'email';
+  type?: 'button' | 'submit' | 'reset' | undefined;
 }
 
 const images = {
@@ -18,11 +19,12 @@ function SignButton({
   color = 'black',
   useImage = false,
   kindImage = 'google',
+  type = 'button',
 }: SignButtonProps) {
   const signButton =
     color === 'black' ? (
       <button
-        type="button"
+        type={type}
         className="flex justify-center gap-2 w-[15.625rem] py-3 rounded-sm bg-content-primary text-white border border-white text-xs"
       >
         {useImage && (
@@ -33,7 +35,7 @@ function SignButton({
       </button>
     ) : (
       <button
-        type="button"
+        type={type}
         className="w-[15.625rem] py-3 rounded-sm bg-white text-content-primary  text-xs"
       >
         {label}
