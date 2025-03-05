@@ -1,9 +1,16 @@
+import { tm } from '@/utils/tw-merge';
 import Image from 'next/image';
 
-function Logo() {
+interface LogoProps {
+  className?: string;
+  w?: number;
+  h?: number;
+}
+
+function Logo({ className = '', w = 100, h = 100 }: LogoProps) {
   return (
-    <figure className="flex justify-center">
-      <Image src="/logo.svg" alt="로고" width={245} height={140} />
+    <figure className={tm('flex justify-center', className)}>
+      <Image src="/logo.svg" alt="로고" width={w} height={h} />
       <figcaption className="sr-only">로고</figcaption>
     </figure>
   );
