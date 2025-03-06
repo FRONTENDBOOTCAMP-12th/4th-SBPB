@@ -1,14 +1,17 @@
 'use client';
 
 import { useId, useState } from 'react';
+import { tm } from '@/utils/tw-merge';
 
 type SignInputProps = React.ComponentProps<'input'> & {
   label?: string;
+  isLabelShow?: boolean;
 };
 
 function SignInput({
   label = '',
   type = 'text',
+  isLabelShow = false,
   ...restProps
 }: SignInputProps) {
   const id = useId();
@@ -20,7 +23,10 @@ function SignInput({
 
   return (
     <div className="flex flex-col gap-0.5 w-[15.625rem]">
-      <label className="text-xs text-white" htmlFor={id}>
+      <label
+        className={tm('text-xs text-white', { 'sr-only': !isLabelShow })}
+        htmlFor={id}
+      >
         {label}
       </label>
       <input
