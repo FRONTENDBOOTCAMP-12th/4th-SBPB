@@ -27,7 +27,7 @@ function SignUpForm() {
         label="비밀번호 확인"
         placeholder="같은 비밀번호를 입력해주세요"
       />
-      <SignButton label="관심지역 선택" color="white" />
+      <SignButton label="관심지역 선택" color="white" className="mt-10" />
     </form>
   );
 }

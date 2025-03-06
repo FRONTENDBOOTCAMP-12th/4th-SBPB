@@ -1,5 +1,6 @@
 import Logo from '@/components/logo';
 import SignButton from './sign-button';
+import SignLink from './sign-link';
 
 function SignUpKind() {
   return (
@@ -11,7 +12,12 @@ function SignUpKind() {
         </h1>
         <SignButton useImage kindImage="google" label="구글로 가입하기" />
         <SignButton useImage kindImage="kakao" label="카카오로 가입하기" />
-        <SignButton useImage kindImage="email" label="이메일로 가입하기" />
+        <SignLink
+          useImage
+          kindImage="email"
+          label="이메일로 가입하기"
+          href="/signup/email"
+        />
       </div>
     </div>
   );
