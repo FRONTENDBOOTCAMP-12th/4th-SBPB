@@ -35,7 +35,16 @@ function SignLink({
         )}
       >
         {useImage && (
-          <Image src={images[kindImage]} alt="google" width={18} height={18} />
+          <Image
+            style={{
+              width: 18,
+              height: 18,
+            }}
+            src={images[kindImage]}
+            alt="google"
+            width={18}
+            height={18}
+          />
         )}
 
         {label}
