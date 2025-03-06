@@ -1,4 +1,5 @@
-import Back from '@/features/register-post/components/back'
+import Nav from '@/components/nav-items';
+
 export default function Home() {
-  return <Back />
+  return <Nav />;
 }
