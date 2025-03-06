@@ -27,11 +27,11 @@ function PostCreateInput({
           value={value}
           onChange={onChange}
           placeholder={placeholder}
-          className="bg-white w-[100%] h-screen rounded-tl-xl rounded-tr-xl p-3 placeholder-gray-600 "
-          rows={4}
+          className="bg-white w-[100%] h-[100%] rounded-tl-xl rounded-tr-xl p-3 placeholder-gray-600 "
+          rows={20}
         />
       ) : (
-        <div className="relative border-solid border-b-[0.2px] border-gray-200 mx-3">
+        <div className="relative border-solid border-b-[0.2px] border-gray-200 mx-3 mt-[20px]">
           <input
             type="text"
             value={value}

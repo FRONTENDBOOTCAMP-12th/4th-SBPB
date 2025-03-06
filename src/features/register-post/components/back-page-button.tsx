@@ -11,10 +11,7 @@ function BackPageButton() {
   }
 
   return (
-    <button
-      onClick={handleGoBack}
-      className="bg-transparent fixed top-0 left-0 m-1"
-    >
+    <button onClick={handleGoBack} className="bg-transparent ">
       <Image src="/left.svg" width={46} height={46} alt="이전 페이지" />
     </button>
   )
