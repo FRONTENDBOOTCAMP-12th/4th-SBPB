@@ -1,5 +1,5 @@
-import SignButton from './sign-button';
 import SignInput from './sign-input';
+import SignLink from './sign-link';
 
 function SignUpForm() {
   return (
@@ -31,7 +31,12 @@ function SignUpForm() {
         placeholder="같은 비밀번호를 입력해주세요"
         isLabelShow
       />
-      <SignButton label="관심지역 선택" color="white" className="mt-10" />
+      <SignLink
+        href="/signup/select-area"
+        label="관심지역 선택"
+        color="white"
+        className="mt-10"
+      />
     </form>
   );
 }
