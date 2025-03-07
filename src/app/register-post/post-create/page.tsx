@@ -12,8 +12,8 @@ export default function Home() {
   const [description, setDescription] = useState('')
 
   return (
-    <div className="inset-0 h-screen flex flex-col gap-3 pt-16">
-      <div className="absolute inset-0">
+    <div className="h-screen flex flex-col pt-16 bg-accent">
+      <div className="fixed inset-0 z-0">
         <div className="h-full w-full bg-[url('/sample.jpg')] bg-cover bg-center"></div>
         <div className="absolute inset-0 bg-black opacity-50"></div>
       </div>
@@ -26,7 +26,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="relative top-10 z-10 flex flex-col flex-grow  overflow-y-auto">
+      <div className="relative top-10 z-10 flex flex-col overflow-y-auto ">
         <PostCreateInput
           label="Title"
           value={title}
