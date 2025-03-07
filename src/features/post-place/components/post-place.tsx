@@ -4,13 +4,27 @@ import { tm } from '@/utils/tw-merge';
 import { useEffect, useState } from 'react';
 
 
+interface City {
+    city: string,
+    id: string
+}
+
 function PostPlace() {
   
-  const [cities, setCities] = useState<string[]>([])
+  
+  const [cities, setCities] = useState<City[]>([])
 
   function handleSearch(formdata:FormData){
     const place = formdata.get('place');
-    setCities([...cities,place])
+    setCities((prev) => {
+      return [
+        ...prev,
+        {
+          city: String(place),
+          id: String(place),
+        },
+      ];
+    });
   }
     return (
       <>
