@@ -1,40 +1,60 @@
 'use client';
 
+import { AreaType } from '@/types/area-data-type';
+import { tm } from '@/utils/tw-merge';
 import Image from 'next/image';
-import Plus from './plus';
-import { useState } from 'react';
-import { tm } from '../utils/tw-merge';
+import { SetStateAction } from 'react';
 import Checked from './checked';
+import Plus from './plus';
 
-function AreaCard() {
-  const [isClicked, setIsClicked] = useState<boolean>(false);
+interface AreaCardProps {
+  area: AreaType;
+  areas: AreaType[];
+  setAreas: React.Dispatch<SetStateAction<AreaType[]>>;
+}
 
-  const handleCardClick = () => {
-    setIsClicked((prevState) => !prevState);
+function AreaCard({ area, setAreas }: AreaCardProps) {
+  const { name: cityName, enName: cityEnName, isSelected } = area;
+
+  const bgColor = isSelected ? 'bg-gray-200' : 'bg-white';
+
+  const handleClick = () => {
+    setAreas((prevAreas) => {
+      const selectedNum = prevAreas.filter((area) => area.isSelected).length;
+
+      return prevAreas.map((area) =>
+        area.name === cityName
+          ? {
+              ...area,
+              isSelected: selectedNum < 3 ? true : false,
+            }
+          : area
+      );
+    });
   };
-
-  const bgColor = isClicked ? 'bg-gray-200' : 'bg-white';
 
   return (
     <button
       className={tm(
-        'rounded-sm size-[5.625rem] content-center relative',
+        'rounded-xl size-[5.625rem] content-center relative',
         bgColor
       )}
-      onClick={handleCardClick}
-      aria-pressed={isClicked}
+      aria-pressed={isSelected}
+      onClick={handleClick}
     >
       <div className="flex flex-col items-center gap-2 mt-2.5">
         <Image
-          src="/cities/jeju.webp"
-          alt="제주도"
+          src={`/cities/${cityEnName}.webp`}
+          alt={cityName}
           width={40}
           height={40}
           className="rounded-full"
           priority
         />
-        <h2 className="text-content-primary text-xs font-semibold">제주도</h2>
-        {isClicked ? (
+        <h2 className="text-content-primary text-xs font-semibold">
+          {cityName}
+        </h2>
+        {isSelected ? (
           <Checked className="absolute top-1 right-1 flex flex-col justify-center items-center bg-content-primary rounded-full p-0.5" />
         ) : (
           <Plus className="absolute top-1 right-1 flex flex-col justify-center items-center bg-content-primary rounded-full p-0.5" />
