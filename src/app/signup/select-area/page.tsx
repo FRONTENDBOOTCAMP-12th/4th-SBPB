@@ -6,12 +6,18 @@ import SignButton from '@/features/sign/components/sign-button';
 import { AreaType } from '@/types/area-data-type';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
+import { toast } from 'react-toastify';
 
 function SelectAreaPage() {
   const [areas, setAreas] = useState<AreaType[]>(areaData);
 
   const handleSubmit = () => {
     const areaData = areas.filter((area) => area.isSelected);
+
+    if (!areaData.length) {
+      toast.error('최소 1개 이상의 지역을 선택하세요.');
+      return;
+    }
 
     console.log(areaData);
   };

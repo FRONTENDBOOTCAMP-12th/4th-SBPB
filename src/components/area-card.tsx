@@ -22,14 +22,13 @@ function AreaCard({ area, setAreas }: AreaCardProps) {
     setAreas((prevAreas) => {
       const selectedNum = prevAreas.filter((area) => area.isSelected).length;
 
-      return prevAreas.map((area) =>
-        area.name === cityName
-          ? {
-              ...area,
-              isSelected: selectedNum < 3 ? true : false,
-            }
-          : area
-      );
+      return prevAreas.map((area) => {
+        if (area.name === cityName) {
+          if (area.isSelected) return { ...area, isSelected: false };
+          if (selectedNum < 3) return { ...area, isSelected: true };
+        }
+        return area;
+      });
     });
   };
 
