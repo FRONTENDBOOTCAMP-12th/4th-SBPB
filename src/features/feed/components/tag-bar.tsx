@@ -21,13 +21,13 @@ function TagBar() {
   const [selectedTag, setSelectedTag] = useState<TagTypes['value']>('all');
 
   return (
-    <fieldset className="w-full">
+    <fieldset className="w-full bg-[#eeeeee]">
       <legend className="sr-only">태그 선택</legend>
 
       <div
         role="radiogroup"
         aria-labelledby="tag-label"
-        className={tm('flex gap-2 m-2')}
+        className={tm('flex justify-center gap-2 my-2')}
       >
         {Tags.map((tag) => (
           <label
@@ -40,7 +40,7 @@ function TagBar() {
               }
             }}
             className={tm(`
-              w-14 h-9 text-xs font-semibold rounded-sm cursor-pointer 
+              w-13.5 h-9 text-xs font-semibold rounded-sm cursor-pointer 
               flex justify-center items-center bg-white hover:bg-accent/80 duration-300
               peer-focus:ring-2 peer-focus:ring-accent
             `)}
