@@ -3,22 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { tm } from '@/utils/tw-merge';
-
-export interface FeedCardProps {
-  id: number;
-  user: {
-    nickname: string;
-    image: string;
-  };
-  post: {
-    content: string;
-    imageUrl: string;
-    date: string;
-  };
-  onExpand?: () => void;
-  onCollapse?: () => void;
-  className?: string;
-}
+import { FeedCardProps } from '@/features/feed/types/feed-card-props';
 
 // 더미데이터
 export function getDummyFeedData(): FeedCardProps[] {
