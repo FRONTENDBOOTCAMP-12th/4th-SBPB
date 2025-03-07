@@ -8,6 +8,7 @@ interface SignButtonProps {
   kindImage?: 'google' | 'kakao' | 'email';
   type?: 'button' | 'submit' | 'reset' | undefined;
   className?: string;
+  onClick?: () => void;
 }
 
 const images = {
@@ -23,10 +24,16 @@ function SignButton({
   kindImage = 'google',
   type = 'button',
   className = '',
+  onClick,
 }: SignButtonProps) {
+  const handleSubmit = () => {
+    onClick?.();
+  };
+
   const signButton =
     color === 'black' ? (
       <button
+        onClick={handleSubmit}
         type={type}
         className={tm(
           'flex justify-center gap-2 w-[15.625rem] py-3 rounded-sm bg-content-primary text-white border border-white text-xs',
@@ -41,6 +48,7 @@ function SignButton({
       </button>
     ) : (
       <button
+        onClick={handleSubmit}
         type={type}
         className={tm(
           'flex justify-center w-[15.625rem] py-3 rounded-sm bg-white text-content-primary  text-xs',

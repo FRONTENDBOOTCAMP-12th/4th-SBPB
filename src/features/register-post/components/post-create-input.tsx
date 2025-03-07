@@ -20,24 +20,23 @@ function PostCreateInput({
   }, [value])
 
   return (
-    <div>
+    <div className="overflow-hidden">
       <label className="hidden">{label}</label>
       {type === 'textarea' ? (
         <textarea
           value={value}
           onChange={onChange}
           placeholder={placeholder}
-          className="bg-white w-[100%] h-[100%] rounded-tl-xl rounded-tr-xl p-3 placeholder-gray-600 "
-          rows={20}
+          className="bg-white w-full h-[calc(100vh+64px)] rounded-tl-xl rounded-tr-xl p-3 placeholder-gray-600 m-0"
         />
       ) : (
-        <div className="relative border-solid border-b-[0.2px] border-gray-200 mx-3 mt-[20px]">
+        <div className="overflow-visible relative border-solid border-b-[0.2px]  border-gray-200 mx-3 pt-[20px] mb-[80px]">
           <input
             type="text"
             value={value}
             onChange={onChange}
             placeholder={placeholder}
-            className={`w-[90%] relative  item-center pb-1.5 ${customClass}`}
+            className={`w-[90%] relative item-center pb-1.5 ${customClass}`}
           />
 
           <div
