@@ -11,6 +11,8 @@
     "format": "prettier --write ./src/app --ignore-path .gitignore"
   },
   "dependencies": {
+    "@supabase/ssr": "^0.5.2",
+    "@supabase/supabase-js": "^2.49.1",
     "clsx": "^2.1.1",
     "framer-motion": "^12.4.10",
     "lodash-es": "^4.17.21",

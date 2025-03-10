@@ -5,6 +5,7 @@ export interface FeedCardProps {
     image: string;
   };
   post: {
+    id: string;
     content: string;
     imageUrl: string;
     date: string;

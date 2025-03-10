@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import { tm } from '@/utils/tw-merge';
 import { FeedCardProps } from '@/features/feed/types/feed-card-props';
+import FeedLikeBtn from './feed-like-btn';
 
 // 더미데이터
 export function getDummyFeedData(): FeedCardProps[] {
@@ -12,6 +13,7 @@ export function getDummyFeedData(): FeedCardProps[] {
       id: 1,
       user: { nickname: '닉네임1', image: '/default-image.svg' },
       post: {
+        id: '1',
         content:
           '샘플 게시글입니다. 더 많은 내용을 추가할 수 있습니다. 현재 60자 이후 숨김 처리 내용 더 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 있음.',
         imageUrl: '/default-image.svg',
@@ -22,6 +24,7 @@ export function getDummyFeedData(): FeedCardProps[] {
       id: 2,
       user: { nickname: '닉네임2', image: '/default-image.svg' },
       post: {
+        id: '2',
         content:
           '샘플 게시글입니다. 더 많은 내용을 추가할 수 있습니다. 현재 60자 이후 숨김 처리 내용 더 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 있음.',
         imageUrl: '/default-image.svg',
@@ -32,6 +35,7 @@ export function getDummyFeedData(): FeedCardProps[] {
       id: 3,
       user: { nickname: '닉네임3', image: '/default-image.svg' },
       post: {
+        id: '3',
         content: `샘플 게시글입니다. 더 많은 내용을 추가할 수 있습니다. 현재 60자 이후 숨김 처리 내용 더 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 있음.
 					샘플 게시글입니다.더 많은 내용을 추가할 수 있습니다.현재 60자 이후 숨김 처리 내용 더 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~있음.`,
         imageUrl: '/default-image.svg',
@@ -42,6 +46,7 @@ export function getDummyFeedData(): FeedCardProps[] {
       id: 4,
       user: { nickname: '닉네임4', image: '/default-image.svg' },
       post: {
+        id: '4',
         content: `샘플 게시글입니다. 더 많은 내용을 추가할 수 있습니다. 현재 60자 이후 숨김 처리 내용 더 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 있음.
 					샘플 게시글입니다.더 많은 내용을 추가할 수 있습니다.현재 60자 이후 숨김 처리 내용 더 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~있음.`,
         imageUrl: '/default-image.svg',
@@ -80,7 +85,7 @@ export default function FeedCard({
 
   return (
     <div className="py-4 px-4 bg-white">
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3 relative">
         {/* 프로필 이미지 */}
         <div
           className={tm(
@@ -94,6 +99,7 @@ export default function FeedCard({
           <p className="font-semibold">{userNickname}</p>
           <p className="text-xs text-primary">{postDate}</p>
         </div>
+        <FeedLikeBtn postId={post.id} />
       </div>
       {/* 게시글 이미지 */}
       <div className="mt-3 flex items-center justify-center">
