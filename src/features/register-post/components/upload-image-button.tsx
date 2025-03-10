@@ -12,7 +12,9 @@ function UploadImageButton({ onFilesSelected }: UploadImageButtonProps) {
 
   const createQueryString = useCallback((name: string, value: string) => {
     const params = new URLSearchParams();
+    console.log(params);
     params.set(name, value);
+    console.log(params);
     return params.toString();
   }, []);
 
@@ -21,6 +23,17 @@ function UploadImageButton({ onFilesSelected }: UploadImageButtonProps) {
     if (files && files.length > 0) {
       const newFiles = Array.from(files);
       setSelectedFiles(newFiles);
+
+      const fileData = newFiles.map((file) => {
+        return {
+          name: file.name,
+          type: file.type,
+          size: file.size,
+          content: URL.createObjectURL(file),
+        };
+      });
+      localStorage.setItem('selectedFiles', JSON.stringify(fileData)); // 파일 데이터(localStorage에 저장)
+
       onFilesSelected(selectedFiles); // 부모 컴포넌트로 파일 전달
 
       const fileNames = newFiles.map((file) => file.name);
