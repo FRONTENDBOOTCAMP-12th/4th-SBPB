@@ -11,6 +11,7 @@ const FeedSortDropdown = memo(function FeedSortDropdown() {
       <select
         value={sortType}
         onChange={(e) => setSortType(e.target.value as 'latest' | 'popular')}
+        className="hover:text-accent"
       >
         <option value="latest">최신순</option>
         <option value="popular">인기순</option>
