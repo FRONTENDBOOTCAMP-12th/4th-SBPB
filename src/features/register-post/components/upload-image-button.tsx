@@ -1,6 +1,40 @@
-import Image from 'next/image'
+'use client';
 
-function UploadImageButton() {
+import Image from 'next/image';
+import { useState, useRef, useCallback } from 'react';
+import { UploadImageButtonProps } from '../types/upload-image-button-props';
+import { useRouter } from 'next/navigation';
+
+function UploadImageButton({ onFilesSelected }: UploadImageButtonProps) {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const router = useRouter();
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+
+  const createQueryString = useCallback((name: string, value: string) => {
+    const params = new URLSearchParams();
+    params.set(name, value);
+    return params.toString();
+  }, []);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      const newFiles = Array.from(files);
+      setSelectedFiles(newFiles);
+      onFilesSelected(selectedFiles); // 부모 컴포넌트로 파일 전달
+
+      const fileNames = newFiles.map((file) => file.name);
+
+      router.push(
+        '/register-post/photo-edit' +
+          '?' +
+          createQueryString('image', JSON.stringify(fileNames))
+      );
+    } else {
+      onFilesSelected(null); // 파일이 없으면 null 전달
+    }
+  };
+
   return (
     <div className="flex items-center justify-center min-h-screen ">
       <div
@@ -15,20 +49,24 @@ function UploadImageButton() {
           className="mr-1"
         />
         <input
+          ref={fileInputRef}
+          key={Date.now()}
           type="file"
+          multiple
           accept="image/*"
           id="upload-image"
+          onChange={handleFileChange}
           style={{ display: 'none' }}
         />
         <label
           htmlFor="upload-image"
-          className="cursor-pointer bg-transparent border-none p-0 m-0 text-white"
+          className="cursor-pointer bg-transparent border-none p-0 m-0 text-white "
         >
           사진을 선택하세요
         </label>
       </div>
     </div>
-  )
+  );
 }
 
-export default UploadImageButton
+export default UploadImageButton;
