@@ -2,8 +2,8 @@
 "use client";
 import { tm } from '@/utils/tw-merge';
 import { useState } from 'react';
-import PlaceSearch from './place-search';
-import MyPlaceList from './my-place-list';
+import PlaceSearch from '../../features/post-place/components/place-search';
+import MyPlaceList from '../../features/post-place/components/my-place-list';
 
 export interface City {
     name: string,
