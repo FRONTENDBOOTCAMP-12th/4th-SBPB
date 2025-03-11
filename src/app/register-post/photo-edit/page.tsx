@@ -71,7 +71,7 @@ export default function PhotoEdit() {
   useEffect(() => {
     // 컴포넌트가 마운트될 때 IndexedDB에서 파일 데이터를 불러옴
     loadFilesFromIndexedDB();
-  });
+  }, []);
 
   return (
     <div className="bg-primary h-screen">
