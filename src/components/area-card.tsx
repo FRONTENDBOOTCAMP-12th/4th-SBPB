@@ -21,7 +21,6 @@ function AreaCard({ area, setAreas }: AreaCardProps) {
   const handleClick = () => {
     setAreas((prevAreas) => {
       const selectedNum = prevAreas.filter((area) => area.isSelected).length;
-
       return prevAreas.map((area) => {
         if (area.name === cityName) {
           if (area.isSelected) return { ...area, isSelected: false };
