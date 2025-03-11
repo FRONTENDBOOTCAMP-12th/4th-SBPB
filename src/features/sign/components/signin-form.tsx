@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import SignInput from './sign-input';
 import SignButton from './sign-button';
@@ -21,7 +23,18 @@ function SignInForm() {
 
       if (error) throw new Error('계정이 없으시다면 회원가입을 진행해주세요.');
 
-      console.log(data);
+      if (data.session) {
+        localStorage.setItem(
+          'isAuth',
+          JSON.stringify({
+            accessToken: data.session?.access_token,
+            email: data.user?.email,
+          })
+        );
+        toast.success('로그인에 성공하였습니다.');
+
+        router.push('/');
+      }
     } catch (err) {
       toast.error('계정이 없으시다면 회원가입을 먼저 진행해주세요');
       console.error(err);
