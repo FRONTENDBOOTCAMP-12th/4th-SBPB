@@ -4,15 +4,18 @@ import Image from 'next/image';
 import { useState, useRef, useCallback } from 'react';
 import { UploadImageButtonProps } from '../types/upload-image-button-props';
 import { useRouter } from 'next/navigation';
+import { FileInfo } from '../types/file-info';
 
 function UploadImageButton({ onFilesSelected }: UploadImageButtonProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
-  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [, setSelectedFiles] = useState<File[]>([]);
 
   const createQueryString = useCallback((name: string, value: string) => {
     const params = new URLSearchParams();
+    console.log(params);
     params.set(name, value);
+    console.log(params);
     return params.toString();
   }, []);
 
@@ -21,15 +24,34 @@ function UploadImageButton({ onFilesSelected }: UploadImageButtonProps) {
     if (files && files.length > 0) {
       const newFiles = Array.from(files);
       setSelectedFiles(newFiles);
-      onFilesSelected(selectedFiles); // 부모 컴포넌트로 파일 전달
 
-      const fileNames = newFiles.map((file) => file.name);
+      const filePromises: Promise<FileInfo>[] = newFiles.map((file) => {
+        return new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            const base64data = reader.result as string;
+            resolve({
+              name: file.name,
+              type: file.type,
+              size: file.size,
+              content: base64data,
+            });
+          };
+          reader.readAsDataURL(file);
+        });
+      });
 
-      router.push(
-        '/register-post/photo-edit' +
-          '?' +
-          createQueryString('image', JSON.stringify(fileNames))
-      );
+      Promise.all(filePromises).then((fileData) => {
+        localStorage.setItem('selectedFiles', JSON.stringify(fileData)); // 파일 데이터(localStorage에 저장)
+        onFilesSelected(newFiles); // 부모 컴포넌트로 파일 전달
+
+        const fileNames = newFiles.map((file) => file.name);
+        router.push(
+          '/register-post/photo-edit' +
+            '?' +
+            createQueryString('image', JSON.stringify(fileNames))
+        );
+      });
     } else {
       onFilesSelected(null); // 파일이 없으면 null 전달
     }
