@@ -5,7 +5,7 @@ import UploadImageButton from '@/features/register-post/components/upload-image-
 import { useState } from 'react';
 
 export default function PhotoUpload() {
-  const [selectedFiles, setSelectedFiles] = useState<File[] | null>(null);
+  const [, setSelectedFiles] = useState<File[] | null>(null);
 
   const handleFilesSelected = (files: File[] | null) => {
     if (files) {

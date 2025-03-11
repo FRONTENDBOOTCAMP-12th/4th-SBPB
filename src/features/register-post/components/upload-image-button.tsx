@@ -1,21 +1,52 @@
 'use client';
 
-import Image from 'next/image';
 import { useState, useRef, useCallback } from 'react';
 import { UploadImageButtonProps } from '../types/upload-image-button-props';
 import { useRouter } from 'next/navigation';
-import { FileInfo } from '../types/file-info';
+import Image from 'next/image';
 
 function UploadImageButton({ onFilesSelected }: UploadImageButtonProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
   const [, setSelectedFiles] = useState<File[]>([]);
 
+  // IndexedDB에 파일 저장 함수
+  const saveFileToIndexedDB = (file: File) => {
+    const request = indexedDB.open('fileDatabase', 1);
+
+    // 데이터베이스가 없으면 생성
+    request.onupgradeneeded = (event) => {
+      const db = (event.target as IDBRequest).result as IDBDatabase;
+      if (!db.objectStoreNames.contains('files')) {
+        db.createObjectStore('files', { keyPath: 'id' });
+      }
+    };
+
+    request.onerror = (event) => {
+      console.error('IndexedDB 에러:', event);
+    };
+
+    request.onsuccess = (event) => {
+      const db = (event.target as IDBRequest).result as IDBDatabase;
+      const transaction = db.transaction('files', 'readwrite');
+      const store = transaction.objectStore('files');
+
+      // 파일을 IndexedDB에 저장
+      const fileData = {
+        id: file.name,
+        name: file.name,
+        type: file.type,
+        size: file.size,
+        content: file, // 파일 자체를 저장
+      };
+
+      store.put(fileData);
+    };
+  };
+
   const createQueryString = useCallback((name: string, value: string) => {
     const params = new URLSearchParams();
-    console.log(params);
     params.set(name, value);
-    console.log(params);
     return params.toString();
   }, []);
 
@@ -25,33 +56,19 @@ function UploadImageButton({ onFilesSelected }: UploadImageButtonProps) {
       const newFiles = Array.from(files);
       setSelectedFiles(newFiles);
 
-      const filePromises: Promise<FileInfo>[] = newFiles.map((file) => {
-        return new Promise((resolve) => {
-          const reader = new FileReader();
-          reader.onloadend = () => {
-            const base64data = reader.result as string;
-            resolve({
-              name: file.name,
-              type: file.type,
-              size: file.size,
-              content: base64data,
-            });
-          };
-          reader.readAsDataURL(file);
-        });
+      // IndexedDB에 파일 저장
+      newFiles.forEach((file) => {
+        saveFileToIndexedDB(file); // IndexedDB에 파일 저장
       });
 
-      Promise.all(filePromises).then((fileData) => {
-        localStorage.setItem('selectedFiles', JSON.stringify(fileData)); // 파일 데이터(localStorage에 저장)
-        onFilesSelected(newFiles); // 부모 컴포넌트로 파일 전달
+      onFilesSelected(newFiles); // 부모 컴포넌트로 파일 전달
 
-        const fileNames = newFiles.map((file) => file.name);
-        router.push(
-          '/register-post/photo-edit' +
-            '?' +
-            createQueryString('image', JSON.stringify(fileNames))
-        );
-      });
+      const fileNames = newFiles.map((file) => file.name);
+      router.push(
+        '/register-post/photo-edit' +
+          '?' +
+          createQueryString('image', JSON.stringify(fileNames))
+      );
     } else {
       onFilesSelected(null); // 파일이 없으면 null 전달
     }
@@ -59,10 +76,7 @@ function UploadImageButton({ onFilesSelected }: UploadImageButtonProps) {
 
   return (
     <div className="flex items-center justify-center min-h-screen ">
-      <div
-        className="flex flex-row items-center justify-center border-2 border-solid border-white rounded-3xl h-10 p-2 
-      "
-      >
+      <div className="flex flex-row items-center justify-center border-2 border-solid border-white rounded-3xl h-10 p-2">
         <Image
           src="/photo.svg"
           width={24}
