@@ -12,8 +12,9 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 
 function SelectAreaPage() {
-  const { saveArea, userId, userEmail, userSelectedArea, userPassword } =
-    useAuthEmailStore((s) => s);
+  const { saveArea, userId, userEmail, userPassword } = useAuthEmailStore(
+    (s) => s
+  );
   const supabase = createClient();
   const router = useRouter();
 
@@ -27,7 +28,7 @@ function SelectAreaPage() {
 
     const areaData = areas.filter((area) => area.isSelected);
 
-    if (!areaData.length) {
+    if (areaData.length === 0) {
       toast.error('최소 1개 이상의 지역을 선택하세요.');
       return;
     }
@@ -43,7 +44,8 @@ function SelectAreaPage() {
       });
 
       if (authError) {
-        throw new Error('올바른 가입 정보가 아닙니다. :', authError);
+        console.error(authError);
+        throw new Error('올바른 가입 정보가 아닙니다.');
       }
 
       const { error: insertError } = await supabase
@@ -53,13 +55,14 @@ function SelectAreaPage() {
             user_id: data.user?.id,
             nickname: userId,
             email: userEmail.trim(),
-            interested_area: userSelectedArea,
+            interested_area: useAuthEmailStore.getState().userSelectedArea,
           },
         ])
         .select();
 
       if (insertError) {
-        throw new Error('다음과 같은 오류가 발생하였습니다.', insertError);
+        console.error(insertError);
+        throw new Error('에러가 발생하였습니다');
       }
 
       toast.success('회원가입 성공');
