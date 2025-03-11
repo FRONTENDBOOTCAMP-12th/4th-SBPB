@@ -48,6 +48,9 @@ importers:
       '@next/eslint-plugin-next':
         specifier: ^15.2.1
         version: 15.2.1
+      '@supabase/ssr':
+        specifier: ^0.5.2
+        version: 0.5.2(@supabase/supabase-js@2.49.1)
       '@tailwindcss/postcss':
         specifier: 4.0.9
         version: 4.0.9

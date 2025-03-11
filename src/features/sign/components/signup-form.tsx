@@ -1,9 +1,30 @@
+import { useRouter } from 'next/navigation';
+import SignButton from './sign-button';
 import SignInput from './sign-input';
-import SignLink from './sign-link';
+import { useAuthEmailStore } from '@/store/auth-Email-store';
 
 function SignUpForm() {
+  const router = useRouter();
+  const { saveAuth } = useAuthEmailStore((s) => s);
+
+  const handleSubmitForm = (formData: FormData) => {
+    const userData = {
+      userId: formData.get('id')?.toString() ?? '',
+      userEmail: formData.get('email')?.toString() ?? '',
+      userPassword: formData.get('password')?.toString() ?? '',
+      userPasswordConfirm: formData.get('passwordConfirm')?.toString() ?? '',
+    };
+
+    saveAuth(userData);
+
+    router.push('/signup/select-area');
+  };
+
   return (
-    <form className="mx-auto w-[15.625rem] flex flex-col gap-4">
+    <form
+      className="mx-auto w-[15.625rem] flex flex-col gap-4"
+      action={handleSubmitForm}
+    >
       <SignInput
         name="id"
         label="아이디"
@@ -31,8 +52,8 @@ function SignUpForm() {
         placeholder="같은 비밀번호를 입력해주세요"
         isLabelShow
       />
-      <SignLink
-        href="/signup/select-area"
+      <SignButton
+        type="submit"
         label="관심지역 선택"
         color="white"
         className="mt-10"
