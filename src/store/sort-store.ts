@@ -9,5 +9,5 @@ interface SortState {
 
 export const useSortStore = create<SortState>((set) => ({
   sortType: 'latest',
-  setSortType: (type) => set({ sortType: type }),
+  setSortType: (sortType) => set({ sortType }),
 }));
