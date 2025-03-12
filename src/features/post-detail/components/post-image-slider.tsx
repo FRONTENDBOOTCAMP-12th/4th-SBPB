@@ -31,6 +31,7 @@ function PostImageSlider({ images }: PostImageSliderProps) {
   const paginate = (newDirection: number) => {
     setPage([page + newDirection, newDirection]); // 페이지를 업데이트하고, 이동 방향을 설정
   };
+  const safeImages = images.map((img) => (img ? img : '/logo.svg'));
 
   return (
     <div className="relative w-full h-[232px] overflow-hidden rounded-t-2xl">
@@ -49,7 +50,7 @@ function PostImageSlider({ images }: PostImageSliderProps) {
           className="absolute w-full h-full" // 이미지가 전체 슬라이더 크기에 맞게 커버되도록 설정
         >
           <Image
-            src={images[imageIndex(page)]}
+            src={safeImages[imageIndex(page)]}
             alt="게시글 이미지"
             fill={true}
             style={{ objectFit: 'cover' }}

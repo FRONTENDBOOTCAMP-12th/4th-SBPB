@@ -22,7 +22,7 @@ export default function Home() {
     } else {
       router.push('/signin');
     }
-  }, []);
+  }, [router]);
 
   if (!isLoading) {
     return (

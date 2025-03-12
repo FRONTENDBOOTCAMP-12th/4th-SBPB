@@ -8,17 +8,18 @@ import PostImageSlider from '@/features/post-detail/components/post-image-slider
 import PostSubsection from '@/features/post-detail/components/post-subsection';
 import { PostData } from '@/types/post-data-types';
 import { createClient } from '@/utils/supabase/client';
-import { useSearchParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
 
 const supabase = createClient();
 
 export default function PostDetail() {
-  const searchParams = useSearchParams();
-  const postId = searchParams.get('postId');
+  const [postId, setPostId] = useState<string | null>(null);
 
-  console.log(searchParams);
-  console.log(postId);
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const postId = urlParams.get('postId');
+    setPostId(postId);
+  }, []);
 
   const [postData, setPostData] = useState<PostData | null>(null);
 

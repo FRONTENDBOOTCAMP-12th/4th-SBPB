@@ -41,7 +41,7 @@ const GuestProfile = () => (
 const UserProfile = () => {
   const [profileImage, setProfileImage] = useState<string | null>(null);
 
-  const [nickname, setNickname] = useState<string | null>('닉네임');
+  const [nickname] = useState<string | null>('닉네임');
 
   interface StatsTypes {
     posts: number;
@@ -50,7 +50,7 @@ const UserProfile = () => {
     followers: number;
   }
 
-  const [stats, setStats] = useState<StatsTypes>({
+  const [stats] = useState<StatsTypes>({
     posts: 1000,
     photos: 10000,
     following: 1,

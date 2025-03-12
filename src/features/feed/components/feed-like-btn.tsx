@@ -6,7 +6,7 @@ import Image from 'next/image';
 
 export default function FeedLikeBtn({ postId }: FeedLikeBtnProps) {
   const { likedPosts, likeCounts, toggleLike, setLikes } = useLikeStore();
-  const [loading, setLoading] = useState(false); // 비동기 작업 중 인지 확인
+  const [, setLoading] = useState(false); // 비동기 작업 중 인지 확인
   const loadingRef = useRef(false); // useRef로 중복 클릭 방지
   const supabase = createClient();
 

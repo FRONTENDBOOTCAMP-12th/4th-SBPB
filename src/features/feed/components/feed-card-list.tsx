@@ -51,10 +51,10 @@ export default function FeedCardList() {
             date: new Date(post.created_at).toLocaleDateString(),
             thumbs: Number(post.thumbs || 0),
             user: {
-              id: String(post.user?.id || ''),
-              nickname: String(post.user?.nickname || '닉네임 없음'),
+              id: String(post.user?.[0]?.id || ''),
+              nickname: String(post.user?.[0]?.nickname || '닉네임 없음'),
               profile_path: String(
-                post.user?.profile_path || '/default-image.svg'
+                post.user?.[0]?.profile_path || '/default-image.svg'
               ),
             },
           })
