@@ -6,6 +6,7 @@ import PostCreateButton from '@/features/register-post/components/post-create-bu
 import PostCreateInput from '@/features/register-post/components/post-create-input';
 import { useState, useEffect } from 'react';
 import { createClient } from '@/utils/supabase/client';
+import { useRouter } from 'next/navigation';
 
 // IndexedDB에서 파일을 불러오는 함수
 const loadFilesFromIndexedDB = () => {
@@ -32,11 +33,38 @@ const loadFilesFromIndexedDB = () => {
   });
 };
 
-export default function Home() {
+// IndexedDB의 파일 데이터를 삭제하는 함수
+const deleteFilesFromIndexedDB = () => {
+  return new Promise<void>((resolve, reject) => {
+    const request = indexedDB.open('fileDatabase', 1);
+    request.onsuccess = (event) => {
+      const db = (event.target as IDBRequest).result as IDBDatabase;
+      const transaction = db.transaction('files', 'readwrite');
+      const store = transaction.objectStore('files');
+
+      const clearRequest = store.clear(); // 모든 데이터를 삭제
+
+      clearRequest.onsuccess = () => {
+        resolve();
+      };
+
+      clearRequest.onerror = () => {
+        reject('IndexedDB에서 파일을 삭제하는 것에 실패했습니다.');
+      };
+    };
+
+    request.onerror = () => {
+      reject('IndexedDB를 open 하는 것에 실패했습니다.');
+    };
+  });
+};
+
+export default function PostCreate() {
   const [title, setTitle] = useState('');
   const [tags, setTags] = useState('');
   const [description, setDescription] = useState('');
   const [bgImage, setBgImage] = useState<string | null>(null);
+  const router = useRouter();
 
   // 페이지가 로드될 때 IndexedDB에서 파일을 불러와 첫 번째 이미지를 배경으로 설정
   useEffect(() => {
@@ -94,20 +122,30 @@ export default function Home() {
       });
 
       // 게시글 데이터 Supabase에 삽입
-      const { error: insertError } = await supabase.from('post').insert([
-        {
-          title,
-          tags,
-          description,
-          image_url: imageUrls[0],
-          other_images: imageUrls.slice(1),
-        },
-      ]);
+      const { data, error: insertError } = await supabase
+        .from('post')
+        .insert([
+          {
+            title,
+            tags,
+            description,
+            image_url: imageUrls[0],
+            other_images: imageUrls.slice(1),
+          },
+        ])
+        .select('id');
 
       if (insertError) {
         console.error('insert 중 에러 발생:', insertError);
       } else {
         alert('슈퍼베이스 테이블에 성공적으로 반영되었습니다.');
+
+        // IndexedDB의 파일 데이터를 삭제
+        await deleteFilesFromIndexedDB();
+
+        const postId = data?.[0]?.id; // 데이터에서 ID 추출
+
+        router.push(`/post-detail` + `?` + `postId=${postId}`); // 상세 페이지로 이동
 
         setTitle('');
         setTags('');

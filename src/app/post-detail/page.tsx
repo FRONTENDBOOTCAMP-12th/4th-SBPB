@@ -29,7 +29,7 @@ export default function PostDetail() {
           .from('post')
           .select(
             `
-            id, title, description, image_url, thumbs, created_at, image_url, other_images, location, user: userinfo!inner(id, nickname, profile_path)
+            id, title, description, image_url, thumbs, created_at, image_url, other_images, location
           `
           )
           .eq('id', postId)
