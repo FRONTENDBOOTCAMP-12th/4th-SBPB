@@ -1,5 +1,3 @@
-import { userData } from './user-data-types';
-
 export interface PostData {
   id: number;
   title: string;
@@ -9,5 +7,4 @@ export interface PostData {
   created_at: string;
   other_images: (string | null)[];
   location: string;
-  user: userData[];
 }
