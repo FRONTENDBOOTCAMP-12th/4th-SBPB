@@ -13,7 +13,7 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { id: 'feed', src: '/paper.svg', href: '#', alt: '피드', label: '피드' },
+  { id: 'feed', src: '/paper.svg', href: '/feed', alt: '피드', label: '피드' },
   { id: 'search', src: '/search.svg', href: '#', alt: '검색', label: '검색' },
   {
     id: 'plus',
@@ -49,7 +49,7 @@ function NavItems() {
             className={` ${selectedItem === item.id ? 'shadow-[0_-2px_0_0_black]' : ''} `}
           >
             <Link href={item.href}>
-              <figure className="flex flex-col items-center px-3 py-2">
+              <figure className="flex flex-col items-center px-2 py-2">
                 <Image src={item.src} width={24} height={24} alt={item.alt} />
                 <figcaption>{item.label}</figcaption>
               </figure>
