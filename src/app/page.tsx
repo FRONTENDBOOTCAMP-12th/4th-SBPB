@@ -15,6 +15,7 @@ export default function Home() {
 
     if (isAuth) {
       setIsLoading(false);
+      router.push('/feed');
     } else {
       router.push('/signin');
     }

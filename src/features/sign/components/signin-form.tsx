@@ -33,7 +33,7 @@ function SignInForm() {
         );
         toast.success('로그인에 성공하였습니다.');
 
-        router.push('/');
+        router.push('/feed');
       }
     } catch (err) {
       toast.error('계정이 없으시다면 회원가입을 먼저 진행해주세요');
