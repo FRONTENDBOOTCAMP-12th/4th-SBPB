@@ -38,7 +38,6 @@ export default function FeedCard({
       ref={isLastPost ? lastPostRef : null}
       id={`post-${postId}`}
       className="py-4 px-4 bg-white w-full"
-      onClick={() => onCardClick(postId)}
     >
       <div className="flex items-center gap-3 relative">
         {/* 프로필 이미지 */}
@@ -72,6 +71,7 @@ export default function FeedCard({
           width={288}
           height={160}
           className="rounded-xl bg-content-tertiary"
+          onClick={() => onCardClick(postId)}
         />
       </div>
 
