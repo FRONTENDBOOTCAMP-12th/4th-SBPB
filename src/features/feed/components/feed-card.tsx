@@ -11,11 +11,13 @@ export default function FeedCard({
   isExpanded,
   setExpandedPostId,
   isLastPost,
+  onCardClick,
 }: {
   post: FeedCardProps;
   isExpanded: boolean;
   setExpandedPostId: (id: string | null) => void;
   isLastPost: boolean;
+  onCardClick: (postId: string) => void;
 }) {
   const { postId, user, description, imageUrl, date } = post;
   const MAX_TEXT_LENGTH = 60;
@@ -36,6 +38,7 @@ export default function FeedCard({
       ref={isLastPost ? lastPostRef : null}
       id={`post-${postId}`}
       className="py-4 px-4 bg-white w-full"
+      onClick={() => onCardClick(postId)}
     >
       <div className="flex items-center gap-3 relative">
         {/* 프로필 이미지 */}

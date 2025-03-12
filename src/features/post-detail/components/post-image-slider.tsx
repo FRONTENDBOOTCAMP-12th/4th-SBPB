@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 
 interface PostImageSliderProps {
-  images: string[]; // images는 슬라이더에서 보여줄 이미지들의 URL 배열입니다.
+  images: (string | null)[]; // images는 슬라이더에서 보여줄 이미지들의 URL 배열입니다.
 }
 
 const variants = {
