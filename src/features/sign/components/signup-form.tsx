@@ -67,7 +67,7 @@ function SignUpForm() {
 
   return (
     <form
-      className="mx-auto w-[15.625rem] flex flex-col"
+      className="mx-auto w-[15.625rem] flex flex-col gap-2"
       action={handleSubmitForm}
     >
       <SignInput
