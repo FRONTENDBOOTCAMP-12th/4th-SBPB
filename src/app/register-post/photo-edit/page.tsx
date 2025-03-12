@@ -48,8 +48,6 @@ export default function PhotoEdit() {
         const images = fileData.map((file) => file.content); // URL 목록
         setSelectedImages(images);
 
-        console.log(selectedImage);
-
         if (images.length > 0) {
           setSelectedImage(images[0]); // 첫 번째 이미지를 기본 이미지로 설정
         }
@@ -73,7 +71,7 @@ export default function PhotoEdit() {
   useEffect(() => {
     // 컴포넌트가 마운트될 때 IndexedDB에서 파일 데이터를 불러옴
     loadFilesFromIndexedDB();
-  });
+  }, []);
 
   return (
     <div className="bg-primary h-screen">
