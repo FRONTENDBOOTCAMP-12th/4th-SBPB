@@ -16,7 +16,7 @@ function PostHeader() {
     console.log('삭제');
   };
   return (
-    <div className="flex flex-row items-center px-3.5 z-10000">
+    <div className="flex flex-row items-center px-3.5 z-10000 relative">
       <div className="bg-black rounded-full flex items-center justify-center w-10 h-10 mr-1">
         <Image
           src="/paper-white.svg"
@@ -41,7 +41,7 @@ function PostHeader() {
       </button>
 
       {isModalOpen && (
-        <div className="fixed top-10 right-2 z-100">
+        <div className="absolute top-full mt-1 right-2 z-100">
           <PostModal onEdit={handleEdit} onDelete={handleDelete} />
         </div>
       )}
