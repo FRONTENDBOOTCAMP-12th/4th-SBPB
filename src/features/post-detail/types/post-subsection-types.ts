@@ -1,6 +1,6 @@
 export interface PostSubsectionProps {
   location: string;
   locationDetail: string;
-  thumb: number;
+  thumb: number | null;
   comment: number;
 }

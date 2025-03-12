@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useSortStore } from '@/store/sort-store';
 import { createClient } from '@/utils/supabase/client';
+import { useRouter } from 'next/navigation';
 import FeedCard from './feed-card';
 import {
   FeedCardProps,
@@ -17,6 +18,7 @@ export default function FeedCardList() {
   const { sortType } = useSortStore();
   const [posts, setPosts] = useState<FeedCardProps[]>([]);
   const [expandedPostId, setExpandedPostId] = useState<string | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -65,6 +67,10 @@ export default function FeedCardList() {
     fetchPosts();
   }, [sortType]);
 
+  const handleCardClick = (postId: string) => {
+    router.push(`/post-detail` + `?` + `postId=${postId}`); // 상세 페이지로 이동
+  };
+
   return (
     <div className="w-full flex flex-col items-center">
       {posts.length === 0 ? (
@@ -77,6 +83,7 @@ export default function FeedCardList() {
             isExpanded={expandedPostId === post.postId}
             setExpandedPostId={setExpandedPostId}
             isLastPost={index === posts.length - 1}
+            onCardClick={handleCardClick}
           />
         ))
       )}
