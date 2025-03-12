@@ -8,7 +8,7 @@ interface PhotoEditThumbnailProps {
 }
 function PhotoEditThumbnail({ photos, onImageClick }: PhotoEditThumbnailProps) {
   return (
-    <div className="grid grid-cols-4 grid-rows-4">
+    <div className="grid grid-cols-4 grid-rows-4 ml-auto justify-items-center items-center">
       {photos.map((image, index) => (
         <div key={index} onClick={() => onImageClick(image)}>
           <Image
