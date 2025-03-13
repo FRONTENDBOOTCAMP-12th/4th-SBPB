@@ -2,7 +2,6 @@
 
 import { motion } from 'framer-motion';
 import SignButton from './sign-button';
-import { useAuthEmailStore } from '@/store/auth-Email-store';
 import { toast } from 'react-toastify';
 import AreaCard from '@/components/area-card';
 import { createClient } from '@/utils/supabase/client';
@@ -10,6 +9,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { AreaType } from '@/types/area-data-type';
 import { areaData } from '@/data/area-data';
+import { useAuthEmailStore } from '@/store/auth-Email-store';
 
 function SelectArea() {
   const { saveArea, userId, userEmail, userPassword } = useAuthEmailStore(

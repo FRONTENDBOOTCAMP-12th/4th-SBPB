@@ -3,9 +3,9 @@
 import { useRouter } from 'next/navigation';
 import SignButton from './sign-button';
 import SignInput from './sign-input';
-import { useAuthEmailStore } from '@/store/auth-Email-store';
 import { SetStateAction, useState } from 'react';
 import { emailReg, idReg, pwReg } from '@/utils/regex/regex';
+import { useAuthEmailStore } from '@/store/auth-Email-store';
 
 function SignUpForm() {
   const router = useRouter();
