@@ -1,3 +1,5 @@
+'use client';
+
 import { useSortStore } from '@/store/sort-store';
 
 const FeedSortDropdown = () => {
