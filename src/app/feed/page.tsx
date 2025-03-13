@@ -4,6 +4,11 @@ import Profile from '@/components/profile';
 import TagBar from '@/features/feed/components/tag-bar';
 import FeedSortDropdown from '@/features/feed/components/feed-sort-dropdown';
 import FeedCardList from '@/features/feed/components/feed-card-list';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: '게시글 피드',
+};
 
 function FeedPage() {
   return (
