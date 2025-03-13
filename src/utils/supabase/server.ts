@@ -18,9 +18,9 @@ export async function createClient() {
               cookieStore.set(name, value, options)
             );
           } catch {
-            // The `setAll` method was called from a Server Component.
-            // This can be ignored if you have middleware refreshing
-            // user sessions.
+            // 서버 컴포넌트에서 `setAll`이 호출될 경우,
+            // Next.js의 제한으로 인해 쿠키 설정이 적용되지 않을 수 있음.
+            // 만약 미들웨어에서 세션을 관리하고 있다면, 이 오류를 무시해도 됨.
           }
         },
       },
