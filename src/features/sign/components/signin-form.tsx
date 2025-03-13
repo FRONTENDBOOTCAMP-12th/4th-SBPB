@@ -47,9 +47,9 @@ function SignInForm() {
       className="flex flex-col gap-2.5 w-[15.625rem] mx-auto"
       action={handleLogin}
     >
-      <h1 className="text-white font-semibold text-[1.75rem] self-start">
+      <h2 className="text-white font-semibold text-[1.75rem] self-start">
         로그인
-      </h1>
+      </h2>
       <SignInput
         name="email"
         placeholder="이메일을 입력해주세요"
