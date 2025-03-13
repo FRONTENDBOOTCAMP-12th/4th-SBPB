@@ -6,9 +6,14 @@ interface CheckedProps {
 
 function Checked({ className }: CheckedProps) {
   return (
-    <figure className={className}>
-      <Image src="/checked.svg" alt="체크" width={14} height={14} priority />
-    </figure>
+    <Image
+      className={className}
+      src="/checked.svg"
+      alt="체크"
+      width={14}
+      height={14}
+      priority
+    />
   );
 }
 
