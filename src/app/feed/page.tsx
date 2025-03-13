@@ -1,5 +1,3 @@
-'use client';
-
 import { tm } from '@/utils/tw-merge';
 import NavItems from '@/components/nav-items';
 import Profile from '@/components/profile';

@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useState, useRef } from 'react';
 import { useLikeStore } from '@/store/like-store';
 import { createClient } from '@/utils/supabase/client';
