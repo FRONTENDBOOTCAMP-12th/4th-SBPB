@@ -1,9 +1,7 @@
-'use client';
-
-import { AnimatePresence } from 'framer-motion';
 import './globals.css';
-import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Head from 'next/head';
+import Toast from '@/components/toast';
 
 export default function RootLayout({
   children,
@@ -12,21 +10,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <AnimatePresence>
-        <body>
-          <ToastContainer
-            toastClassName={() =>
-              'bg-gray-800 text-white w-full font-semibold shadow-lg rounded-lg p-4'
-            }
-            progressClassName="bg-blue-500"
-            position="top-center"
-            limit={1}
-            autoClose={2500}
-            closeButton={false}
-          />
-          {children}
-        </body>
-      </AnimatePresence>
+      <Head>
+        <title>사방팔방</title>
+        <meta name="사방팔방" content="사방팔방 페이지입니다." />
+      </Head>
+      <body>
+        <Toast />
+        {children}
+      </body>
     </html>
   );
 }
