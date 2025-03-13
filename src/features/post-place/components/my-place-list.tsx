@@ -1,3 +1,4 @@
+'use client';
 import { tm } from '@/utils/tw-merge';
 import Image from 'next/image';
 import { City } from '@/features/post-place/types/city-type';

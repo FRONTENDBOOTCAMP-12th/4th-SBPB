@@ -1,4 +1,3 @@
-'use client';
 import { tm } from '@/utils/tw-merge';
 import Image from 'next/image';
 import { useState } from 'react';
