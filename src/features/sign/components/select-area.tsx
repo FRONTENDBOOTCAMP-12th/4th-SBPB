@@ -9,7 +9,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { AreaType } from '@/types/area-data-type';
 import { areaData } from '@/data/area-data';
-import { useAuthEmailStore } from '@/store/auth-Email-store';
+import { useAuthEmailStore } from '@/store/auth-email-store';
 
 function SelectArea() {
   const { saveArea, userId, userEmail, userPassword } = useAuthEmailStore(
