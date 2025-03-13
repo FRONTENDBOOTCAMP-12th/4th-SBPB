@@ -1,3 +1,4 @@
+import { areaData } from '@/data/area-data';
 import SelectArea from '@/features/sign/components/select-area';
 import { Metadata } from 'next';
 
@@ -6,7 +7,7 @@ export const metadata: Metadata = {
 };
 
 function SelectAreaPage() {
-  return <SelectArea />;
+  return <SelectArea areaData={areaData} />;
 }
 
 export default SelectAreaPage;

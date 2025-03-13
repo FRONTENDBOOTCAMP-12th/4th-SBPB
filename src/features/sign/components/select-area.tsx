@@ -7,18 +7,17 @@ import AreaCard from '@/components/area-card';
 import { createClient } from '@/utils/supabase/client';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { AreaType } from '@/types/area-data-type';
-import { areaData } from '@/data/area-data';
 import { useAuthEmailStore } from '@/store/auth-email-store';
+import { AreaType } from '@/types/area-data-type';
 
-function SelectArea() {
+function SelectArea({ areaData }: { areaData: AreaType[] }) {
   const { saveArea, userId, userEmail, userPassword } = useAuthEmailStore(
     (s) => s
   );
   const supabase = createClient();
   const router = useRouter();
 
-  const [areas, setAreas] = useState<AreaType[]>(areaData);
+  const [areas, setAreas] = useState(areaData);
 
   const handleSubmit = async () => {
     if (!userEmail || !userPassword) {
