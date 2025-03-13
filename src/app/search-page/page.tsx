@@ -1,4 +1,3 @@
-'use client';
 import { tm } from '@/utils/tw-merge';
 import { useEffect, useRef } from 'react';
 import SearchInput from '@/features/search-page/components/search-page';
