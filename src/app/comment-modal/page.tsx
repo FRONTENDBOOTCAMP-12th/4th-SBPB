@@ -1,5 +1,5 @@
-'use client';
 import { tm } from '@/utils/tw-merge';
+import Image from 'next/image';
 
 function CommentModal() {
   return (
@@ -20,7 +20,13 @@ function CommentModal() {
             <li className={tm('px-[10px]', 'min-h-[74px]')}>
               <figure className={tm('flex', 'gap-[10px]')}>
                 <picture>
-                  <img src="./thum-img.svg" />
+                  <Image
+                    src="./thum-img.svg"
+                    width={14}
+                    height={14}
+                    alt="사용자 이미지"
+                    priority={true}
+                  />
                 </picture>
                 <figcaption>
                   <span>망나뇽</span>
@@ -36,7 +42,13 @@ function CommentModal() {
             <li className={tm('px-[10px]')}>
               <figure className={tm('flex', 'gap-[10px]')}>
                 <picture>
-                  <img src="./thum-img.svg" />
+                  <Image
+                    src="./thum-img.svg"
+                    width={14}
+                    height={14}
+                    alt="사용자 이미지"
+                    priority={true}
+                  />
                 </picture>
                 <figcaption>
                   <span>샤미드</span>
@@ -52,7 +64,13 @@ function CommentModal() {
             <li className={tm('px-[10px]')}>
               <figure className={tm('flex', 'gap-[10px]')}>
                 <picture>
-                  <img src="./thum-img.svg" />
+                  <Image
+                    src="./thum-img.svg"
+                    width={14}
+                    height={14}
+                    alt="사용자 이미지"
+                    priority={true}
+                  />
                 </picture>
                 <figcaption>
                   <span>고라파덕</span>
@@ -68,7 +86,13 @@ function CommentModal() {
             <li className={tm('px-[10px]')}>
               <figure className={tm('flex', 'gap-[10px]')}>
                 <picture>
-                  <img src="./thum-img.svg" />
+                  <Image
+                    src="./thum-img.svg"
+                    width={14}
+                    height={14}
+                    alt="사용자 이미지"
+                    priority={true}
+                  />
                 </picture>
                 <figcaption>
                   <span>박윤경</span>
@@ -107,7 +131,13 @@ function CommentModal() {
             )}
           >
             <form className={tm('flex', 'gap-[10px]')}>
-              <img src="./thum-img-02.svg" />
+              <Image
+                src="./thum-img-02.svg"
+                width={14}
+                height={14}
+                alt="사용자 이미지"
+                priority={true}
+              />
               <div
                 className={tm(
                   'inline-flex',
@@ -136,9 +166,12 @@ function CommentModal() {
                     'cursor-pointer'
                   )}
                 >
-                  <img
+                  <Image
                     src="./comment-button.svg"
-                    className={tm('inline-block')}
+                    width={14}
+                    height={14}
+                    alt="댓글 버튼튼"
+                    priority={true}
                   />
                 </button>
               </div>
