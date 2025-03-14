@@ -6,15 +6,14 @@ interface PlusProps {
 
 function Plus({ className }: PlusProps) {
   return (
-    <figure className={className}>
-      <Image
-        src="/plus-white.svg"
-        alt="더하기"
-        width={14}
-        height={14}
-        priority
-      />
-    </figure>
+    <Image
+      className={className}
+      src="/plus-white.svg"
+      alt="더하기"
+      width={14}
+      height={14}
+      priority
+    />
   );
 }
 
