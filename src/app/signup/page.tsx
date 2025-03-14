@@ -1,20 +1,12 @@
-'use client';
+import SignUp from '@/features/sign/components/sign-up';
+import type { Metadata } from 'next';
 
-import SignUpKind from '@/features/sign/components/signup-kind';
-import { motion } from 'framer-motion';
+export const metadata: Metadata = {
+  title: '회원가입',
+};
 
 function SignUpPage() {
-  return (
-    <div className="text-white">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: -20 }}
-        transition={{ duration: 1 }}
-      >
-        <SignUpKind />
-      </motion.div>
-    </div>
-  );
+  return <SignUp />;
 }
 
 export default SignUpPage;

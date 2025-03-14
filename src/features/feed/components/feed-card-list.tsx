@@ -8,6 +8,7 @@ import FeedCard from './feed-card';
 import {
   FeedCardProps,
   SortOption,
+  UserProps,
 } from '@/features/feed/types/feed-card-props';
 
 // feed-card-list.tsx : 데이터 불러오기, 게시글 정렬
@@ -40,24 +41,32 @@ export default function FeedCardList() {
       const { data, error } = await query;
       if (error) {
         console.error('게시글 불러오기 오류:', error);
+        return;
       } else if (data) {
         const formattedPosts: FeedCardProps[] = data.map(
-          (post): FeedCardProps => ({
-            postId: String(post.id),
-            sortType: sortType as SortOption,
-            id: String(post.id),
-            description: String(post.description || ''),
-            imageUrl: String(post.image_url || '/default-image.svg'),
-            date: new Date(post.created_at).toLocaleDateString(),
-            thumbs: Number(post.thumbs || 0),
-            user: {
-              id: String(post.user?.[0]?.id || ''),
-              nickname: String(post.user?.[0]?.nickname || '닉네임 없음'),
-              profile_path: String(
-                post.user?.[0]?.profile_path || '/default-image.svg'
-              ),
-            },
-          })
+          (post): FeedCardProps => {
+            // user가 배열로 반환될 가능성 때문에 첫 번째 요소 사용
+            const userData = Array.isArray(post.user)
+              ? post.user[0]
+              : post.user;
+
+            return {
+              postId: String(post.id),
+              sortType: sortType as SortOption,
+              id: String(post.id),
+              description: String(post.description || ''),
+              imageUrl: String(post.image_url || '/default-image.svg'),
+              date: new Date(post.created_at).toLocaleDateString(),
+              thumbs: Number(post.thumbs || 0),
+              user: {
+                id: String(userData?.id || ''),
+                nickname: String(userData?.nickname || '닉네임 없음'),
+                profile_path: String(
+                  userData?.profile_path || '/default-image.svg'
+                ),
+              } as UserProps,
+            };
+          }
         );
 
         setPosts(formattedPosts);
@@ -74,7 +83,9 @@ export default function FeedCardList() {
   return (
     <div className="w-full flex flex-col items-center">
       {posts.length === 0 ? (
-        <div className="py-4 px-4 text-center text-gray-500">로딩 중...</div>
+        <div className="py-4 px-4 text-center text-content-secondary">
+          로딩 중...
+        </div>
       ) : (
         posts.map((post, index) => (
           <FeedCard

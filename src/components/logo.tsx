@@ -10,7 +10,7 @@ interface LogoProps {
 function Logo({ className = '', w = 100, h = 100 }: LogoProps) {
   return (
     <figure className={tm('flex justify-center', className)}>
-      <Image src="/logo.svg" alt="로고" width={w} height={h} priority />
+      <Image src="/logo.svg" alt="사방팔방" width={w} height={h} priority />
     </figure>
   );
 }

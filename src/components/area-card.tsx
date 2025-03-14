@@ -40,24 +40,22 @@ function AreaCard({ area, setAreas }: AreaCardProps) {
       aria-pressed={isSelected}
       onClick={handleClick}
     >
-      <div className="flex flex-col items-center gap-2 mt-2.5">
-        <Image
-          src={`/cities/${cityEnName}.webp`}
-          alt={cityName}
-          width={40}
-          height={40}
-          className="rounded-full"
-          priority
-        />
-        <h2 className="text-content-primary text-xs font-semibold">
-          {cityName}
-        </h2>
-        {isSelected ? (
-          <Checked className="absolute top-1 right-1 flex flex-col justify-center items-center bg-content-primary rounded-full p-0.5" />
-        ) : (
-          <Plus className="absolute top-1 right-1 flex flex-col justify-center items-center bg-content-primary rounded-full p-0.5" />
-        )}
-      </div>
+      <Image
+        src={`/cities/${cityEnName}.webp`}
+        alt={cityName}
+        width={40}
+        height={40}
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-6 rounded-full"
+        priority
+      />
+      <span className="text-content-primary text-xs font-semibold mt-16 block">
+        {cityName}
+      </span>
+      {isSelected ? (
+        <Checked className="absolute top-1 right-1 flex flex-col justify-center items-center bg-content-primary rounded-full p-0.5" />
+      ) : (
+        <Plus className="absolute top-1 right-1 flex flex-col justify-center items-center bg-content-primary rounded-full p-0.5" />
+      )}
     </button>
   );
 }

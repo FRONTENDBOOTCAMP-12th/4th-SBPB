@@ -1,5 +1,5 @@
-function SignInLayout({ children }: { children: React.ReactNode }) {
+function SignLayout({ children }: { children: React.ReactNode }) {
   return <div className="relative bg-primary min-h-screen">{children}</div>;
 }
 
-export default SignInLayout;
+export default SignLayout;
