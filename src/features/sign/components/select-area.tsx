@@ -6,25 +6,48 @@ import { toast } from 'react-toastify';
 import AreaCard from '@/components/area-card';
 import { createClient } from '@/utils/supabase/client';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { useAuthEmailStore } from '@/store/auth-email-store';
+import { useEffect, useState } from 'react';
 import { AreaType } from '@/types/area-data-type';
+import { getUser } from '@/app/api/get-user';
+import { useAuthStore } from '@/store/auth-store';
 
 function SelectArea({ areaData }: { areaData: AreaType[] }) {
-  const { saveArea, userId, userEmail, userPassword } = useAuthEmailStore(
+  const { saveAuth, type, userId, userNickname, userEmail } = useAuthStore(
     (s) => s
   );
+  const [areas, setAreas] = useState(areaData);
   const supabase = createClient();
   const router = useRouter();
 
-  const [areas, setAreas] = useState(areaData);
+  useEffect(() => {
+    try {
+      // 이메일로 가입했을 시 바로 종료되도록
+      if (type === 'email') return;
+
+      async function saveUser() {
+        const user = await getUser();
+        if (!user) throw new Error('user 정보가 없습니다.');
+
+        const userData = {
+          type: 'kakao' as const,
+          userId: user.data.user?.id,
+          userEmail: user.data.user?.email,
+          userNickname: user.data.user?.email?.split('@').at(0),
+        };
+
+        saveAuth(userData);
+        console.log(useAuthStore.getState());
+      }
+      saveUser();
+    } catch (err) {
+      if ((err as string).includes('duplicate')) {
+        toast.error('중복된 닉네임입니다.');
+      }
+      console.error(err);
+    }
+  }, []);
 
   const handleSubmit = async () => {
-    if (!userEmail || !userPassword) {
-      toast.error('이메일 또는 비밀번호를 확인하세요');
-      return;
-    }
-
     const areaData = areas.filter((area) => area.isSelected);
 
     if (areaData.length === 0) {
@@ -34,27 +57,17 @@ function SelectArea({ areaData }: { areaData: AreaType[] }) {
 
     const userArea = areaData.map((data) => data.name);
 
-    saveArea({ userSelectedArea: userArea });
+    saveAuth({ userSelectedArea: userArea });
 
     try {
-      const { data, error: authError } = await supabase.auth.signUp({
-        email: userEmail.toLowerCase().trim(),
-        password: userPassword.trim(),
-      });
-
-      if (authError) {
-        console.error(authError);
-        throw new Error('올바른 가입 정보가 아닙니다.');
-      }
-
       const { error: insertError } = await supabase
         .from('userinfo')
         .insert([
           {
-            user_id: data.user?.id,
-            nickname: userId,
-            email: userEmail.trim(),
-            interested_area: useAuthEmailStore.getState().userSelectedArea,
+            user_id: userId,
+            nickname: userNickname,
+            email: userEmail,
+            interested_area: useAuthStore.getState().userSelectedArea,
           },
         ])
         .select();
@@ -65,9 +78,8 @@ function SelectArea({ areaData }: { areaData: AreaType[] }) {
       }
 
       toast.success('회원가입 성공');
-      router.push('/signin');
-    } catch (error) {
-      console.error(error);
+      router.push('/feed');
+    } catch {
       toast.error('로그인 실패');
       router.push('/signup/email');
     }
