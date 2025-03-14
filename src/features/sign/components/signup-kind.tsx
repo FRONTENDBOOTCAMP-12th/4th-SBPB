@@ -4,6 +4,7 @@ import { kakaoSignIn } from '@/app/api/kakao-signin';
 import Logo from '@/components/logo';
 import SignButton from './sign-button';
 import SignLink from './sign-link';
+import { googleSignIn } from '@/app/api/google-signin';
 
 function SignUpKind() {
   return (
@@ -13,7 +14,12 @@ function SignUpKind() {
         <h1 className="text-white font-semibold text-[1.75rem] self-start my-5">
           회원가입
         </h1>
-        <SignButton useImage kindImage="google" label="구글로 가입하기" />
+        <SignButton
+          onClick={googleSignIn}
+          useImage
+          kindImage="google"
+          label="구글로 가입하기"
+        />
         <SignButton
           onClick={kakaoSignIn}
           useImage
