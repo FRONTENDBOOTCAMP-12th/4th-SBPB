@@ -42,6 +42,32 @@ function SignInForm() {
     }
   };
 
+  const handleKaKaoLogin = async () => {
+    try {
+      const user = await supabase.auth.getUser();
+
+      let options;
+
+      if (user) {
+        options = {
+          redirectTo: `${window.location.origin}/feed`,
+        };
+      } else {
+        options = {
+          redirectTo: `${window.location.origin}/signup/select-area`,
+        };
+      }
+
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'kakao',
+        options,
+      });
+      if (error) throw new Error('계정이 없습니다.');
+    } catch (err) {
+      toast.info(err as string);
+    }
+  };
+
   return (
     <form
       className="flex flex-col gap-2.5 w-[15.625rem] mx-auto"
@@ -70,6 +96,12 @@ function SignInForm() {
         </Link>
       </div>
       <SignButton color="white" label="로그인" type="submit" />
+      <SignButton
+        type="button"
+        color="white"
+        label="SNS로 로그인하기"
+        onClick={handleKaKaoLogin}
+      />
     </form>
   );
 }
