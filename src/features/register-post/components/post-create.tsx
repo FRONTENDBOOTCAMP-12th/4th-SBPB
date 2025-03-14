@@ -1,4 +1,3 @@
-// client/PostCreate.tsx
 'use client';
 
 import BackPageButton from '@/features/register-post/components/back-page-button';
@@ -45,12 +44,6 @@ export default function PostCreate() {
     const fetchFilesAndSetBgImage = async () => {
       try {
         const files = await loadFilesFromIndexedDB();
-        console.log(files);
-        files.map((file) => ({
-          name: file.content.name,
-          data: file.content,
-          type: file.content.type,
-        }));
 
         console.log(files);
         if (files.length > 0) {
@@ -63,13 +56,6 @@ export default function PostCreate() {
       }
     };
     fetchFilesAndSetBgImage();
-
-    const fetchData = async () => {
-      const data = await fetch('/api/post-create');
-      console.log(await data.json()); // {ok: true}
-    };
-
-    fetchData();
   }, []);
 
   const handleUpload = async () => {
