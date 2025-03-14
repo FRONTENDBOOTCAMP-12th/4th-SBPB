@@ -4,6 +4,7 @@ import Toast from '@/components/toast';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://sbpb4.netlify.app/'),
   title: {
     default: '사방팔방 여행후기 공유 서비스 프로젝트', // 기본 페이지 제목
     template: '%s | 사방팔방 여행후기 공유 서비스 프로젝트', // 동적 타이틀 적용
