@@ -7,6 +7,8 @@ import { SetStateAction, useState } from 'react';
 import SignButton from './sign-button';
 import SignInput from './sign-input';
 import { useAuthStore } from '@/store/auth-store';
+import DisabledButton from './disabled-button';
+import { toast } from 'react-toastify';
 
 function SignUpForm() {
   const supabase = createClient();
@@ -81,6 +83,22 @@ function SignUpForm() {
     }
   };
 
+  const nextButton =
+    (userNickname || userEmail || userPassword || userPasswordConfirm) &&
+    !error['passwordConfirm'] ? (
+      <SignButton
+        type="submit"
+        label="관심지역 선택"
+        color="white"
+        className="mt-10"
+      />
+    ) : (
+      <DisabledButton
+        label="관심지역 선택"
+        onClick={() => toast.error('가입 정보를 입력하세요')}
+      />
+    );
+
   return (
     <form
       className="mx-auto w-[15.625rem] flex flex-col gap-2"
@@ -88,8 +106,8 @@ function SignUpForm() {
     >
       <SignInput
         name="id"
-        label="아이디"
-        placeholder="8문자 이상, 숫자영문 조합"
+        label="닉네임"
+        placeholder="8문자 이상의 영어, 숫자"
         value={userNickname}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
           handleChangeInput(setUserNickname, 'id', e)
@@ -137,12 +155,7 @@ function SignUpForm() {
       {error.passwordConfirm && (
         <p className="text-red-400 text-xs">{error.passwordConfirm}</p>
       )}
-      <SignButton
-        type="submit"
-        label="관심지역 선택"
-        color="white"
-        className="mt-10"
-      />
+      {nextButton}
     </form>
   );
 }
