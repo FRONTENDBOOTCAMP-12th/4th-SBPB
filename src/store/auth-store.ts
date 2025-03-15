@@ -9,6 +9,7 @@ interface State {
   userPassword?: string;
   userPasswordConfirm?: string;
   userSelectedArea: string[];
+  userProfile: string;
 }
 
 const INITIAL_STATE: State = {
@@ -19,6 +20,7 @@ const INITIAL_STATE: State = {
   userPassword: '',
   userPasswordConfirm: '',
   userSelectedArea: [],
+  userProfile: '',
 };
 
 export const useAuthStore = create(
