@@ -12,9 +12,8 @@ import { getUser } from '@/app/api/get-user';
 import { useAuthStore } from '@/store/auth-store';
 
 function SelectArea({ areaData }: { areaData: AreaType[] }) {
-  const { saveAuth, type, userId, userNickname, userEmail } = useAuthStore(
-    (s) => s
-  );
+  const { saveAuth, type, userId, userNickname, userEmail, userProfile } =
+    useAuthStore((s) => s);
   const [areas, setAreas] = useState(areaData);
   const supabase = createClient();
   const router = useRouter();
@@ -68,6 +67,7 @@ function SelectArea({ areaData }: { areaData: AreaType[] }) {
             nickname: userNickname,
             email: userEmail,
             interested_area: useAuthStore.getState().userSelectedArea,
+            profile_path: userProfile,
           },
         ])
         .select();
