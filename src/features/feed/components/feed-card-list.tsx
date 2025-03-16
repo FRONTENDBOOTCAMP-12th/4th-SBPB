@@ -2,18 +2,16 @@
 
 import { useEffect, useState } from 'react';
 import { useSortStore } from '@/store/sort-store';
-import { createClient } from '@/utils/supabase/client';
 import { useRouter } from 'next/navigation';
 import FeedCard from './feed-card';
 import {
   FeedCardProps,
   SortOption,
   UserProps,
+  PostType,
 } from '@/features/feed/types/feed-card-props';
 
 // feed-card-list.tsx : 데이터 불러오기, 게시글 정렬
-
-const supabase = createClient();
 
 export default function FeedCardList() {
   const { sortType } = useSortStore();
@@ -23,28 +21,17 @@ export default function FeedCardList() {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      let query = supabase.from('post').select(`
-          id, 
-          description, 
-          image_url, 
-          thumbs,
-          created_at,
-          user: userinfo!inner(id, nickname, profile_path)
-        `);
+      try {
+        const res = await fetch(`/api/feed-card-list?sortType=${sortType}`);
+        const data = await res.json();
 
-      if (sortType === 'latest') {
-        query = query.order('created_at', { ascending: false }); // 최신순 정렬
-      } else if (sortType === 'popular') {
-        query = query.order('thumbs', { ascending: false }); // 인기순 정렬
-      }
+        if (!data.success) {
+          console.error('게시글 불러오기 오류:', data.error);
+          return;
+        }
 
-      const { data, error } = await query;
-      if (error) {
-        console.error('게시글 불러오기 오류:', error);
-        return;
-      } else if (data) {
-        const formattedPosts: FeedCardProps[] = data.map(
-          (post): FeedCardProps => {
+        const formattedPosts: FeedCardProps[] = data.posts.map(
+          (post: PostType): FeedCardProps => {
             // user가 배열로 반환될 가능성 때문에 첫 번째 요소 사용
             const userData = Array.isArray(post.user)
               ? post.user[0]
@@ -58,18 +45,25 @@ export default function FeedCardList() {
               imageUrl: String(post.image_url || '/default-image.svg'),
               date: new Date(post.created_at).toLocaleDateString(),
               thumbs: Number(post.thumbs || 0),
+              createdAt: post.created_at,
+              updatedAt: post.updated_at || '',
+              commentsCount: post.comments_count || 0,
               user: {
                 id: String(userData?.id || ''),
                 nickname: String(userData?.nickname || '닉네임 없음'),
                 profile_path: String(
                   userData?.profile_path || '/default-image.svg'
                 ),
+                email: userData?.email || '',
+                createdAt: userData?.createdAt || '',
               } as UserProps,
             };
           }
         );
 
         setPosts(formattedPosts);
+      } catch (error) {
+        console.error('게시글 불러오기 실패:', error);
       }
     };
 
@@ -77,7 +71,7 @@ export default function FeedCardList() {
   }, [sortType]);
 
   const handleCardClick = (postId: string) => {
-    router.push(`/post-detail` + `?` + `postId=${postId}`); // 상세 페이지로 이동
+    router.push(`/post-detail?postId=${postId}`); // 상세 페이지로 이동
   };
 
   return (
