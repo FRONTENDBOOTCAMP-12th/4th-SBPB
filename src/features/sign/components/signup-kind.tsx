@@ -1,10 +1,10 @@
 'use client';
 
-import { kakaoSignIn } from '@/app/api/kakao-signin';
+import { kakaoSignIn } from '@/utils/sign/kakao-signin';
 import Logo from '@/components/logo';
 import SignButton from './sign-button';
 import SignLink from './sign-link';
-import { googleSignIn } from '@/app/api/google-signin';
+import { googleSignIn } from '@/utils/sign/google-signin';
 
 function SignUpKind() {
   return (

@@ -8,7 +8,6 @@ import { createClient } from '@/utils/supabase/client';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { AreaType } from '@/types/area-data-type';
-import { getUser } from '@/app/api/get-user';
 import { useAuthStore } from '@/store/auth-store';
 
 function SelectArea({ areaData }: { areaData: AreaType[] }) {
@@ -24,18 +23,19 @@ function SelectArea({ areaData }: { areaData: AreaType[] }) {
       if (type === 'email') return;
 
       async function saveUser() {
-        const user = await getUser();
-        if (!user) throw new Error('user 정보가 없습니다.');
+        const data = await fetch('/api/get-user');
+        const user = await data.json();
+
+        if (!user.user) throw new Error('로그인한 유저 정보가 없습니다.');
 
         const userData = {
           type: 'kakao' as const,
-          userId: user.data.user?.id,
-          userEmail: user.data.user?.email,
-          userNickname: user.data.user?.email?.split('@').at(0),
+          userId: user?.user.id,
+          userEmail: user?.user.email,
+          userNickname: user?.user.email.split('@').at(0),
         };
 
         saveAuth(userData);
-        console.log(useAuthStore.getState());
       }
       saveUser();
     } catch (err) {
