@@ -2,6 +2,7 @@ import './globals.css';
 import 'react-toastify/dist/ReactToastify.css';
 import Toast from '@/components/toast';
 import { Metadata } from 'next';
+import Script from 'next/script';
 
 export const metadata: Metadata = {
   title: {
@@ -27,6 +28,9 @@ export const metadata: Metadata = {
   },
 };
 
+const xNcpApiGwApiKeyId: string | undefined =
+  process.env.X_NCP_APIGW_API_KEY_ID;
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -37,6 +41,10 @@ export default function RootLayout({
       <body>
         <Toast />
         {children}
+        <Script
+          src={`https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${xNcpApiGwApiKeyId}&submodules=geocoder`}
+          strategy="beforeInteractive"
+        />
       </body>
     </html>
   );

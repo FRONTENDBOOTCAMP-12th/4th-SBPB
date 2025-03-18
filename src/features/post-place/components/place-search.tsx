@@ -32,7 +32,7 @@ function PlaceSearch({ onSearch }: PlaceSearchProps) {
           <input
             type="search"
             name="place"
-            placeholder="원하는 지역을 검색해 보세요"
+            placeholder="지번,도로명,건물명으로 검색"
             className={tm('w-full', 'text-xs')}
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}

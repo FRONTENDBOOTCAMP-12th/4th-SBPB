@@ -1,9 +1,16 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 import { tm } from '@/utils/tw-merge';
 import Image from 'next/image';
 import { useState } from 'react';
 import PlaceSearch from './place-search';
 import MyPlaceList from './my-place-list';
+
+declare global {
+  interface Window {
+    naver: any;
+  }
+}
 
 export interface City {
   name: string;

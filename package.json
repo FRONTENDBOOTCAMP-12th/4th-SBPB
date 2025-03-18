@@ -13,6 +13,7 @@
   "dependencies": {
     "@supabase/ssr": "^0.5.2",
     "@supabase/supabase-js": "^2.49.1",
+    "@types/navermaps": "^3.7.9",
     "clsx": "^2.1.1",
     "framer-motion": "^12.4.10",
     "lodash-es": "^4.17.21",
