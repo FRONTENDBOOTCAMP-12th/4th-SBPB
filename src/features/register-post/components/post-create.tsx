@@ -6,6 +6,7 @@ import PostCreateButton from '@/features/register-post/components/post-create-bu
 import PostCreateInput from '@/features/register-post/components/post-create-input';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import TagInput from './tag-input';
 
 // IndexedDB에서 파일을 불러오는 함수
 const loadFilesFromIndexedDB = () => {
@@ -34,7 +35,7 @@ const loadFilesFromIndexedDB = () => {
 
 export default function PostCreate() {
   const [title, setTitle] = useState('');
-  const [tags, setTags] = useState('');
+  const [tags, setTags] = useState<string[]>([]);
   const [description, setDescription] = useState('');
   const [bgImage, setBgImage] = useState<string | null>(null);
   const router = useRouter();
@@ -69,7 +70,7 @@ export default function PostCreate() {
       const formData = new FormData();
 
       formData.append('title', title);
-      formData.append('tags', tags);
+      formData.append('tags', tags.join(','));
       formData.append('description', description);
 
       files.forEach((fileObj) => {
@@ -133,14 +134,15 @@ export default function PostCreate() {
           isVisible=""
         />
 
-        <PostCreateInput
+        {/* <PostCreateInput
           label="Tags"
           value={tags}
           onChange={(e) => setTags(e.target.value)}
           placeholder="쉼표 혹은 엔터를 입력하여 태그를 등록 할 수 있습니다."
           customClass="text-sm placeholder-gray-400 text-gray-400"
           isVisible="hidden"
-        />
+        /> */}
+        <TagInput label="태그" tags={tags} setTags={setTags} />
 
         <div className="pt-[33px] pb-[53px]">
           <LocationButton />
