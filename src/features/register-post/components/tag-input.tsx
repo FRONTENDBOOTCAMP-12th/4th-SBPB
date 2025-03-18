@@ -1,12 +1,7 @@
 'use client';
 
-import { SetStateAction, useState } from 'react';
-
-interface TagInputProps {
-  label: string;
-  tags?: string[];
-  setTags: React.Dispatch<SetStateAction<string[]>>;
-}
+import { useState } from 'react';
+import type { TagInputProps } from '../types/tag-input-props';
 
 function TagInput({ label, tags, setTags }: TagInputProps) {
   // 한글 조합 상태 관리
