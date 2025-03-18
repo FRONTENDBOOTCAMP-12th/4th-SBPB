@@ -134,14 +134,6 @@ export default function PostCreate() {
           isVisible=""
         />
 
-        {/* <PostCreateInput
-          label="Tags"
-          value={tags}
-          onChange={(e) => setTags(e.target.value)}
-          placeholder="쉼표 혹은 엔터를 입력하여 태그를 등록 할 수 있습니다."
-          customClass="text-sm placeholder-gray-400 text-gray-400"
-          isVisible="hidden"
-        /> */}
         <TagInput label="태그" tags={tags} setTags={setTags} />
 
         <div className="pt-[33px] pb-[53px]">
