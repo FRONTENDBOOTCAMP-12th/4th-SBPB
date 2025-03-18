@@ -21,12 +21,19 @@ function TagInput({ label, tags, setTags }: TagInputProps) {
     setInputValue('');
   };
 
+  // 태그 삭제 이벤트
+  const handleDeleteTag = (tagName: string) => {
+    const deletedData = tags?.filter((tag) => tag !== tagName) ?? [];
+    setTags(deletedData);
+  };
+
   return (
     <div className="overflow-visible relative border-solid border-b-[0.2px]  border-gray-200 mx-3 pt-[20px] mb-[80px] flex flex-wrap">
       <div className="flex items-center flex-wrap">
         {tags?.map((tag, idx) => (
           <span
             key={idx}
+            onClick={() => handleDeleteTag(tag)}
             className="bg-gray-400 text-white px-2 rounded-full flex items-center my-0.5 text-sm mr-2"
           >
             {tag}
