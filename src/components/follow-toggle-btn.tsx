@@ -1,11 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-
-interface FollowToggleBtnProps {
-  currentUserId: string; // 로그인 유저 ID (uuid)
-  targetUserId: string; // 게시글 작성자 ID (uuid)
-}
+import { FollowToggleBtnProps } from '@/features/feed/types/follow-toggle-btn-props';
 
 function FollowToggleBtn({
   currentUserId,
@@ -49,7 +45,7 @@ function FollowToggleBtn({
     }
   };
 
-  // 본인 글에는 버튼 안 보이게 처리 (선택사항)
+  // 본인 글에는 버튼 안 보이게 처리
   if (isLoggedIn && currentUserId === targetUserId) return null;
 
   return (

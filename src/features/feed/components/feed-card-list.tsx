@@ -16,15 +16,15 @@ import {
 
 export default function FeedCardList() {
   const { sortType } = useSortStore();
-  const { user, fetchUser } = useUserProfileStore(); // Zustand에서 유저 상태 가져오기
-  const currentUserId = user?.id || ''; // 유저 ID 추출
+  const { user, fetchUser } = useUserProfileStore();
+  const currentUserId = user?.id || '';
 
   const [posts, setPosts] = useState<FeedCardProps[]>([]);
   const [expandedPostId, setExpandedPostId] = useState<string | null>(null);
   const router = useRouter();
 
   useEffect(() => {
-    fetchUser(); // 유저 정보 불러오기
+    fetchUser();
   }, [fetchUser]);
 
   useEffect(() => {
@@ -106,7 +106,7 @@ export default function FeedCardList() {
             setExpandedPostId={setExpandedPostId}
             isLastPost={index === posts.length - 1}
             onCardClick={handleCardClick}
-            currentUserId={currentUserId} // 유저 ID 전달
+            currentUserId={currentUserId}
           />
         ))
       )}
