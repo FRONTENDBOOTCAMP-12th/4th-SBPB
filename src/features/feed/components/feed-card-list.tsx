@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useSortStore } from '@/store/sort-store';
+import { useUserProfileStore } from '@/store/user-profile-store';
 import { useRouter } from 'next/navigation';
 import FeedCard from './feed-card';
 import {
@@ -15,9 +16,16 @@ import {
 
 export default function FeedCardList() {
   const { sortType } = useSortStore();
+  const { user, fetchUser } = useUserProfileStore();
+  const currentUserId = user?.id || '';
+
   const [posts, setPosts] = useState<FeedCardProps[]>([]);
   const [expandedPostId, setExpandedPostId] = useState<string | null>(null);
   const router = useRouter();
+
+  useEffect(() => {
+    fetchUser();
+  }, [fetchUser]);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -37,6 +45,14 @@ export default function FeedCardList() {
               ? post.user[0]
               : post.user;
 
+            // uuid 데이터 확인용
+            // console.log('userData.user_id:', userData?.user_id);
+
+            const userIdUUID = userData?.user_id;
+            if (!userIdUUID) {
+              console.warn('user_id(uuid)가 없음:', userData);
+            }
+
             return {
               postId: String(post.id),
               sortType: sortType as SortOption,
@@ -50,6 +66,7 @@ export default function FeedCardList() {
               commentsCount: post.comments_count || 0,
               user: {
                 id: String(userData?.id || ''),
+                user_id: String(userData?.user_id || ''),
                 nickname: String(userData?.nickname || '닉네임 없음'),
                 profile_path: String(
                   userData?.profile_path || '/default-image.svg'
@@ -89,6 +106,7 @@ export default function FeedCardList() {
             setExpandedPostId={setExpandedPostId}
             isLastPost={index === posts.length - 1}
             onCardClick={handleCardClick}
+            currentUserId={currentUserId}
           />
         ))
       )}

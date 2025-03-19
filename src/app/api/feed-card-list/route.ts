@@ -14,7 +14,7 @@ export async function GET(req: Request) {
         image_url, 
         thumbs,
         created_at,
-        user: userinfo!inner(id, nickname, profile_path)
+        user: userinfo!inner(id, nickname, profile_path, user_id)
       `);
 
     if (sortType === 'latest') {

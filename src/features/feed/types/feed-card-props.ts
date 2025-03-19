@@ -2,6 +2,7 @@ export type SortOption = 'latest' | 'popular';
 
 export interface UserProps {
   id: string;
+  user_id: string;
   nickname: string;
   profile_path: string;
   image?: string;
