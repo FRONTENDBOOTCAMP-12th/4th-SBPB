@@ -1,7 +1,13 @@
 import NavItems from '@/components/nav-items';
+import PostCard from '@/features/recommend-place/components/post-card';
 import TagFilter from '@/features/recommend-place/components/tag-filter';
 import ThemeBar from '@/features/recommend-place/components/theme-bar';
 import { createClient } from '@/utils/supabase/server';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: '여행지 추천',
+};
 
 async function RecommendPlacePage() {
   const supabase = await createClient();
@@ -26,6 +32,7 @@ async function RecommendPlacePage() {
     <section>
       <ThemeBar />
       <TagFilter tags={tags} />
+      <PostCard />
       <NavItems />
     </section>
   );
