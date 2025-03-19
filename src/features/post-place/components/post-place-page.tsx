@@ -6,12 +6,6 @@ import { useState } from 'react';
 import PlaceSearch from './place-search';
 import MyPlaceList from './my-place-list';
 
-declare global {
-  interface Window {
-    naver: any;
-  }
-}
-
 export interface City {
   name: string;
   id: string;

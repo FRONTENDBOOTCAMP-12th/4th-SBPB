@@ -1,9 +1,9 @@
-import NaverMap from '@/features/post-place/components/naver-map';
+import KakaoMap from '@/features/post-place/components/kakao-map';
 
 function PlaceMap() {
   return (
     <div>
-      <NaverMap />
+      <KakaoMap />
     </div>
   );
 }

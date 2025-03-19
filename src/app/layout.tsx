@@ -42,7 +42,7 @@ export default function RootLayout({
         <Toast />
         {children}
         <Script
-          src={`https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${xNcpApiGwApiKeyId}&submodules=geocoder`}
+          src="//dapi.kakao.com/v2/maps/sdk.js?appkey=ba7abec9b662a12ad566a98c84d18315&libraries=services&autoload=false"
           strategy="beforeInteractive"
         />
       </body>
