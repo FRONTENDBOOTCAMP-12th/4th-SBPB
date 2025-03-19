@@ -34,6 +34,8 @@ function MyPlaceList({ initialPlaces }: MyPlaceListProps) {
     deleteAllPlaces();
   }
 
+  console.log('myplacelist' + places);
+
   return (
     <>
       <div className={tm('flex', 'justify-between')}>

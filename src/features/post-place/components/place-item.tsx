@@ -60,7 +60,6 @@ const PlaceItem: React.FC<PlaceItemProps> = ({
         ) : (
           <span>{place.address_name}</span>
         )}
-        <span className="tel">{place.phone}</span>
       </div>
     </li>
   );

@@ -6,6 +6,7 @@ import PostCreateButton from '@/features/register-post/components/post-create-bu
 import PostCreateInput from '@/features/register-post/components/post-create-input';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { usePlacesStore } from '@/store/user-place-store';
 
 // IndexedDB에서 파일을 불러오는 함수
 const loadFilesFromIndexedDB = () => {
@@ -37,7 +38,10 @@ export default function PostCreate() {
   const [tags, setTags] = useState('');
   const [description, setDescription] = useState('');
   const [bgImage, setBgImage] = useState<string | null>(null);
+  const { places } = usePlacesStore(); // zustand에서 places 상태 가져오기
   const router = useRouter();
+
+  const placeNames = places.map((place) => place.place_name).join(', ');
 
   // 페이지가 로드될 때 IndexedDB에서 파일을 불러와 첫 번째 이미지를 배경으로 설정
   useEffect(() => {
@@ -71,6 +75,7 @@ export default function PostCreate() {
       formData.append('title', title);
       formData.append('tags', tags);
       formData.append('description', description);
+      formData.append('location', placeNames);
 
       files.forEach((fileObj) => {
         formData.append('files', fileObj.content);

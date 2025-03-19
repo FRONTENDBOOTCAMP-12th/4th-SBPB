@@ -5,9 +5,10 @@ import { FormEvent, useState } from 'react';
 
 interface PlaceSearchProps {
   onSearch: (place: string) => void;
+  disabled?: boolean;
 }
 
-function PlaceSearch({ onSearch }: PlaceSearchProps) {
+function PlaceSearch({ onSearch, disabled = false }: PlaceSearchProps) {
   const [inputValue, setInputValue] = useState('');
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
@@ -15,6 +16,7 @@ function PlaceSearch({ onSearch }: PlaceSearchProps) {
     onSearch(inputValue.trim());
     setInputValue('');
   }
+
   return (
     <>
       <form onSubmit={handleSubmit}>
@@ -33,22 +35,23 @@ function PlaceSearch({ onSearch }: PlaceSearchProps) {
             type="search"
             name="place"
             placeholder="지번,도로명,건물명으로 검색"
-            className={tm('w-full', 'text-xs')}
+            className={tm('w-full', 'text-xs', 'cursor-pointer')}
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
+            disabled={disabled}
           />
           <button
             type="submit"
             title="검색"
             aria-label="검색"
             className={tm('cursor-pointer opacity-90')}
+            disabled={disabled}
           >
             <Image
               src="/search-bar-icon.svg"
               width={18}
               height={18}
               alt="검색"
-              priority={true}
             />
           </button>
         </div>

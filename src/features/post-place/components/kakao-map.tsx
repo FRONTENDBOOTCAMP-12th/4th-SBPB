@@ -7,9 +7,9 @@ import { tm } from '@/utils/tw-merge';
 import Image from 'next/image';
 import PlaceSearch from './place-search';
 import PlaceItem from './place-item';
-import { useRouter } from 'next/navigation';
 import SaveButton from './save-button';
 import { usePlacesStore } from '@/store/user-place-store';
+import CloseButton from './close-button';
 
 declare global {
   interface Window {
@@ -180,29 +180,9 @@ function KakaoMap() {
     searchPlaces(place);
   }
 
-  const router = useRouter();
-
-  const handleGoBack = () => {
-    router.back();
-  };
-
   return (
     <div className={tm('px-[17px]', 'pt-[24px]', 'relative')}>
-      <button
-        type="button"
-        title="페이지 닫기"
-        aria-label="페이지 닫기"
-        className={tm('absolute', 'top-[12px]', 'right-[17px]')}
-        onClick={handleGoBack}
-      >
-        <Image
-          src="/page-close-icon.svg"
-          width={14}
-          height={14}
-          alt="페이지 닫기"
-          priority={true}
-        />
-      </button>
+      <CloseButton />
       <div className="mb-5 mt-4">
         <PlaceSearch onSearch={handleSearch} />
       </div>
