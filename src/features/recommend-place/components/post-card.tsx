@@ -1,24 +1,40 @@
 import Image from 'next/image';
 import TagItem from './tag-item';
+import { createClient } from '@/utils/supabase/server';
 
 interface PostCardProps {
   tags: string[];
   images: string[];
+  userId: string;
 }
 
-function PostCard({ tags, images }: PostCardProps) {
+async function PostCard({ tags, images, userId }: PostCardProps) {
+  const supabase = await createClient();
+
+  const { data: user, error } = await supabase
+    .from('userinfo')
+    .select('nickname, profile_path')
+    .eq('id', userId);
+
+  if (error) {
+    console.error('유저 정보를 갖고 오는 중 에러발생 :', error);
+  }
+
+  const profile = user?.[0].profile_path ?? '';
+  const nickname = user?.[0].nickname ?? '닉네임 없음';
+
   return (
     <article className="py-3.5 px-3 bg-gray-50">
       <div className="flex gap-2">
         <Image
-          src="/cities/busan.webp"
-          alt="유저"
+          src={profile}
+          alt={nickname}
           width={30}
           height={30}
-          className="rounded-2xl"
+          className="rounded-2xl w-[30px] h-[30px] object-cover"
         />
         <div className="flex flex-col mr-auto">
-          <span className="text-xs font-semibold">사용자 이름</span>
+          <span className="text-xs font-semibold">{nickname}</span>
           <span className="text-xs text-content-tertiary">
             게시글 112 • 팔로워 46
           </span>

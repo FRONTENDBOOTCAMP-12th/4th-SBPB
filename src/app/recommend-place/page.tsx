@@ -51,7 +51,16 @@ async function RecommendPlacePage() {
         {posts?.map((post) => {
           const tags = post.tags.split(',');
           const images = [post.image_url, ...post.other_images];
-          return <PostCard key={post.id} tags={tags} images={images} />;
+          const userId = post.user_id;
+
+          return (
+            <PostCard
+              key={post.id}
+              tags={tags}
+              images={images}
+              userId={userId}
+            />
+          );
         })}
       </ul>
       <NavItems />
