@@ -12,27 +12,48 @@ export const metadata: Metadata = {
 async function RecommendPlacePage() {
   const supabase = await createClient();
 
-  const { data, error } = await supabase
+  // 태그 정보 가져오기
+  const { data: tagData, error: tagError } = await supabase
     .from('post')
     .select('tags')
     .range(0, 49);
 
-  if (error) {
-    console.error(error);
+  if (tagError) {
+    console.error(tagError);
     return;
   }
 
-  const tagArr = data.flatMap((tag) => {
+  const tagArr = tagData.flatMap((tag) => {
     return tag.tags.split(',');
   });
 
   const tags = Array.from(new Set(tagArr));
 
+  // 게시글 정보 가져오기
+  const { data: posts, error: postError } = await supabase
+    .from('post')
+    .select('*')
+    .order('thumbs', { ascending: false })
+    .limit(20);
+
+  if (postError) {
+    console.error(
+      '게시글 정보를 갖고 오는 중 오류가 발생하였습니다 :',
+      postError
+    );
+  }
+
   return (
     <section>
       <ThemeBar />
       <TagFilter tags={tags} />
-      <PostCard />
+      <ul>
+        {posts?.map((post) => {
+          const tags = post.tags.split(',');
+          const images = [post.image_url, ...post.other_images];
+          return <PostCard key={post.id} tags={tags} images={images} />;
+        })}
+      </ul>
       <NavItems />
     </section>
   );
