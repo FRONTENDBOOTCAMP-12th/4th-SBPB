@@ -1,21 +1,26 @@
 'use client';
 
+import { emailReg, idReg, pwReg } from '@/utils/regex/regex';
+import { createClient } from '@/utils/supabase/client';
 import { useRouter } from 'next/navigation';
+import { SetStateAction, useState } from 'react';
 import SignButton from './sign-button';
 import SignInput from './sign-input';
-import { SetStateAction, useState } from 'react';
-import { emailReg, idReg, pwReg } from '@/utils/regex/regex';
-import { useAuthEmailStore } from '@/store/auth-email-store';
+import { useAuthStore } from '@/store/auth-store';
+import DisabledButton from './disabled-button';
+import { toast } from 'react-toastify';
 
 function SignUpForm() {
+  const supabase = createClient();
   const router = useRouter();
-  const { saveAuth } = useAuthEmailStore((s) => s);
 
   const [error, setError] = useState<{ [key: string]: string }>({});
-  const [userId, setUserId] = useState<string>('');
+  const [userNickname, setUserNickname] = useState<string>('');
   const [userEmail, setUserEmail] = useState<string>('');
   const [userPassword, setUserPassword] = useState<string>('');
   const [userPasswordConfirm, setUserPasswordConfirm] = useState<string>('');
+
+  const { saveAuth } = useAuthStore();
 
   const handleChangeInput = (
     setter: React.Dispatch<SetStateAction<string>>,
@@ -52,18 +57,47 @@ function SignUpForm() {
     }
   };
 
-  const handleSubmitForm = (formData: FormData) => {
-    const userData = {
-      userId: formData.get('id')?.toString() ?? '',
-      userEmail: formData.get('email')?.toString() ?? '',
-      userPassword: formData.get('password')?.toString() ?? '',
-      userPasswordConfirm: formData.get('passwordConfirm')?.toString() ?? '',
-    };
+  const handleSubmitForm = async () => {
+    try {
+      const { data, error: authError } = await supabase.auth.signUp({
+        email: userEmail.toLowerCase().trim(),
+        password: userPassword.trim(),
+      });
 
-    saveAuth(userData);
+      if (authError) {
+        console.error(authError);
+        throw new Error('올바른 가입 정보가 아닙니다.');
+      }
+      const userData = {
+        userId: data.user?.id,
+        userNickname,
+        userEmail,
+        userPassword,
+        userPasswordConfirm,
+      };
 
-    router.push('/signup/select-area');
+      saveAuth(userData);
+      router.push('/signup/select-area');
+    } catch (err) {
+      console.error(err);
+    }
   };
+
+  const nextButton =
+    (userNickname || userEmail || userPassword || userPasswordConfirm) &&
+    !error['passwordConfirm'] ? (
+      <SignButton
+        type="submit"
+        label="관심지역 선택"
+        color="white"
+        className="mt-10"
+      />
+    ) : (
+      <DisabledButton
+        label="관심지역 선택"
+        onClick={() => toast.error('가입 정보를 입력하세요')}
+      />
+    );
 
   return (
     <form
@@ -72,11 +106,11 @@ function SignUpForm() {
     >
       <SignInput
         name="id"
-        label="아이디"
-        placeholder="8문자 이상, 숫자영문 조합"
-        value={userId}
+        label="닉네임"
+        placeholder="8문자 이상의 영어, 숫자"
+        value={userNickname}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          handleChangeInput(setUserId, 'id', e)
+          handleChangeInput(setUserNickname, 'id', e)
         }
         isLabelShow
       />
@@ -121,12 +155,7 @@ function SignUpForm() {
       {error.passwordConfirm && (
         <p className="text-red-400 text-xs">{error.passwordConfirm}</p>
       )}
-      <SignButton
-        type="submit"
-        label="관심지역 선택"
-        color="white"
-        className="mt-10"
-      />
+      {nextButton}
     </form>
   );
 }

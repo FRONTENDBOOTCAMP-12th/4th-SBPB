@@ -2,32 +2,33 @@ import { create } from 'zustand';
 import { combine } from 'zustand/middleware';
 
 interface State {
+  type: 'email' | 'kakao' | 'google' | '';
   userId: string;
+  userNickname: string;
   userEmail: string;
-  userPassword: string;
-  userPasswordConfirm: string;
+  userPassword?: string;
+  userPasswordConfirm?: string;
   userSelectedArea: string[];
+  userProfile: string;
 }
 
 const INITIAL_STATE: State = {
+  type: '',
   userId: '',
+  userNickname: '',
   userEmail: '',
   userPassword: '',
   userPasswordConfirm: '',
   userSelectedArea: [],
+  userProfile: '',
 };
 
-export const useAuthEmailStore = create(
+export const useAuthStore = create(
   combine(INITIAL_STATE, (set) => ({
-    saveAuth: (userInput: Omit<State, 'userSelectedArea'>) => {
+    saveAuth: (userInput: Partial<State>) => {
       set((state) => ({
         ...state,
         ...userInput,
-      }));
-    },
-    saveArea: (userInput: Pick<State, 'userSelectedArea'>) => {
-      set(() => ({
-        userSelectedArea: userInput.userSelectedArea,
       }));
     },
   }))

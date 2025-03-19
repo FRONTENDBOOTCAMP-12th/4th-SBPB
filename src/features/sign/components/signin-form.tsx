@@ -42,6 +42,56 @@ function SignInForm() {
     }
   };
 
+  const handleKaKaoLogin = async () => {
+    try {
+      let options;
+      const user = await supabase.auth.getUser();
+
+      if (user.data.user) {
+        options = {
+          redirectTo: `${window.location.origin}/feed`,
+        };
+      } else {
+        options = {
+          redirectTo: `${window.location.origin}/signup/select-area`,
+        };
+      }
+
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'kakao',
+        options,
+      });
+      if (error) throw new Error('계정이 없습니다.');
+    } catch (err) {
+      toast.info(err as string);
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    try {
+      let options;
+      const user = await supabase.auth.getUser();
+
+      if (user.data.user) {
+        options = {
+          redirectTo: `${window.location.origin}/feed`,
+        };
+      } else {
+        options = {
+          redirectTo: `${window.location.origin}/signup/select-area`,
+        };
+      }
+
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options,
+      });
+      if (error) throw new Error('계정이 없습니다.');
+    } catch (err) {
+      toast.info(err as string);
+    }
+  };
+
   return (
     <form
       className="flex flex-col gap-2.5 w-[15.625rem] mx-auto"
@@ -70,6 +120,22 @@ function SignInForm() {
         </Link>
       </div>
       <SignButton color="white" label="로그인" type="submit" />
+      <div className="flex gap-1 justify-between">
+        <SignButton
+          className="w-1/2"
+          type="button"
+          label="카카오 로그인"
+          color="white"
+          onClick={handleKaKaoLogin}
+        />
+        <SignButton
+          className="w-1/2"
+          type="button"
+          label="구글 로그인"
+          color="white"
+          onClick={handleGoogleLogin}
+        />
+      </div>
     </form>
   );
 }
