@@ -1,5 +1,5 @@
 import NavItems from '@/components/nav-items';
-import ThemeBar from '@/features/recommend-place/theme-bar';
+import ThemeBar from '@/features/recommend-place/components/theme-bar';
 
 function RecommendPlacePage() {
   return (
