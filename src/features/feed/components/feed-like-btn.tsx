@@ -44,7 +44,7 @@ export default function FeedLikeBtn({ postId }: FeedLikeBtnProps) {
       const data = await res.json();
 
       if (!res.ok) {
-        console.error('Error fetching likes:', data.error);
+        console.error('좋아요 개수 불러오기 오류:', data.error);
         return;
       }
 
@@ -77,7 +77,7 @@ export default function FeedLikeBtn({ postId }: FeedLikeBtnProps) {
 
     const data = await res.json();
     if (!res.ok) {
-      console.error('Error updating likes:', data.error);
+      console.error('좋아요 업데이트 오류:', data.error);
     } else {
       toggleLike(postId, newCount);
     }
@@ -88,7 +88,7 @@ export default function FeedLikeBtn({ postId }: FeedLikeBtnProps) {
 
   return (
     <div
-      className={`flex items-center gap-2 text-sm absolute right-14 cursor-pointer select-none ${
+      className={`flex items-center gap-2 text-sm cursor-pointer select-none ${
         !isAuthenticated ? 'opacity-50 cursor-not-allowed' : ''
       }`}
       onClick={handleLike}

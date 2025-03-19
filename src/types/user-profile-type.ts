@@ -5,7 +5,7 @@ interface User {
 
 interface UserInfo {
   id: number;
-  user_id: number;
+  user_id: string;
   nickname: string;
   email: string;
   profile_path: string | null;
