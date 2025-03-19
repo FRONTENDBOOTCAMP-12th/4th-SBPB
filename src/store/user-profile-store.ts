@@ -10,9 +10,18 @@ export const useUserProfileStore = create<UserProfileState>((set) => ({
   stats: { posts: 0, photos: 0, following: 0, followers: 0 },
 
   fetchUser: async () => {
+    const { data: sessionData } = await supabase.auth.getSession();
     const { data: user, error: userError } = await supabase.auth.getUser();
-    if (userError || !user?.user) {
-      console.error('유저 정보 가져오기 실패:', userError?.message);
+
+    if (!sessionData.session) {
+      // 비로그인 → 세션이 없으면 이후 유저 정보 요청 생략
+      // console.log('로그인되어 있지 않습니다.');
+      return;
+    }
+
+    // 세션 있음 → getUser 호출
+    if (userError) {
+      console.error('유저 정보 가져오기 실패:', userError.message);
       return;
     }
 

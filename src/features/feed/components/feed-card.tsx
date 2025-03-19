@@ -43,7 +43,7 @@ export default function FeedCard({
     <div
       ref={isLastPost ? lastPostRef : null}
       id={`post-${postId}`}
-      className="py-4 px-4 bg-white w-full"
+      className="pt-4 pb-6 px-4 bg-white w-full border border-t-0 border-b-0 border-l-[#eee] border-r-[#eee]"
     >
       <div className="flex items-center gap-3 relative">
         {/* 프로필 이미지 */}
@@ -88,12 +88,12 @@ export default function FeedCard({
       </div>
 
       {/* 게시글 내용 */}
-      <div className="mt-3 text-sm text-content-tertiary break-all relative">
+      <div className="mt-3 text-sm text-content-secondary break-all relative">
         {isExpanded ? description : description.slice(0, MAX_TEXT_LENGTH)}
         {description.length > MAX_TEXT_LENGTH && (
           <button
             onClick={() => setExpandedPostId(isExpanded ? null : postId)}
-            className="text-primary text-sm ml-1 hover:text-accent font-semibold duration-300 absolute bottom-[-16] right-0"
+            className="text-primary text-sm ml-1 hover:text-accent font-semibold duration-300 absolute bottom-[-20] right-0"
           >
             {isExpanded ? '접기' : '더 보기'}
           </button>
