@@ -2,47 +2,24 @@
 'use client';
 import { tm } from '@/utils/tw-merge';
 import Image from 'next/image';
-import { useState } from 'react';
-import PlaceSearch from './place-search';
+import { useRouter, useSearchParams } from 'next/navigation';
 import MyPlaceList from './my-place-list';
+import Link from 'next/link';
+import SaveButton from './save-button';
 
-export interface City {
-  name: string;
-  id: string;
+export interface Place {
+  category_group_name: string;
+  road_address_name: string;
+  place_name: string;
 }
 
 function PostPlacePage() {
-  const [cities, setCities] = useState<City[]>([]);
+  const searchParams = useSearchParams();
+  const placesParam = searchParams.get('places');
+  const initialPlaces: Place[] = placesParam ? JSON.parse(placesParam) : [];
 
-  function handleSearch(place: string) {
-    if (!place) return;
+  console.log(initialPlaces);
 
-    //const place = formdata.get('place');
-    //if ((place as string).length === 0) return;
-    //const isDuplicated = cities.find((city) => city.name === String(place));
-    const isDuplicated = cities.find((city) => city.name === place);
-    if (isDuplicated) return;
-
-    setCities((prev) => {
-      return [
-        ...prev,
-        {
-          name: String(place),
-          id: crypto.randomUUID(),
-        },
-      ];
-    });
-  }
-
-  function handleDelete(id: string) {
-    setCities((prevCities) => {
-      return prevCities.filter((city) => city.id !== id);
-    });
-  }
-
-  function handlePlaceAllDelete() {
-    return setCities([]);
-  }
   return (
     <div className={tm('px-[17px]', 'pt-[24px]', 'relative')}>
       <button
@@ -56,29 +33,30 @@ function PostPlacePage() {
           width={14}
           height={14}
           alt="페이지 닫기"
-          priority={true}
         />
       </button>
-      <h2 className={tm('text-xl', 'mb-[12px]')}>
+      <h2 className={tm('text-xl', 'mb-1')}>
         글에 추가할 장소를 검색해 보세요
       </h2>
-      <PlaceSearch onSearch={handleSearch} />
-      <div className={tm('flex', 'justify-between')}>
-        <p>
-          내 장소 <span className={tm('text-[#8DB0F9]')}>{cities.length}</span>
-        </p>
-        <button
-          type="button"
-          title="장소 전체 삭제"
-          aria-label="장소 전체 삭제"
-          onClick={() => handlePlaceAllDelete()}
-          className={tm('text-xs', 'text-[#6B6B6B]')}
+      <Link href="/register-post/place-map">
+        <div
+          className={tm(
+            'flex',
+            'border-black',
+            'border-[1px]',
+            'h-[40px]',
+            'rounded-lg',
+            'px-[12px] mb-3 items-center bg-gray-100'
+          )}
         >
-          전체 삭제
-        </button>
-      </div>
-      <MyPlaceList cities={cities} onDelete={handleDelete} />
+          <div className={tm('w-full', 'text-xs', 'cursor-pointer ')}>
+            지번, 도로명, 건물명으로 검색
+          </div>
 
+          <Image src="/search-bar-icon.svg" width={18} height={18} alt="검색" />
+        </div>
+      </Link>
+      <MyPlaceList initialPlaces={initialPlaces} />
       <div
         className={tm(
           'fixed',
@@ -88,30 +66,11 @@ function PostPlacePage() {
           'px-[17px]'
         )}
       >
-        <button
-          type="submit"
-          title="저장하기"
-          aria-label="저장하기"
-          className={tm(
-            'w-full',
-            'flex',
-            'items-center',
-            'justify-center',
-            'gap-[7px]',
-            'bg-[#0D0E0F]',
-            'h-[46px]',
-            'rounded-lg'
-          )}
-        >
-          <Image
-            src="/white-pen-icon.svg"
-            width={14}
-            height={14}
-            alt="저장하기"
-            priority={true}
-          />
-          <span className={tm('text-xs', 'text-white')}>이대로 저장할래요</span>
-        </button>
+        <SaveButton
+          selectedPlaces={initialPlaces}
+          targetPath="/register-post/post-create"
+          disabled={initialPlaces.length === 0}
+        />
       </div>
     </div>
   );

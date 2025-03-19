@@ -1,16 +1,22 @@
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { tm } from '@/utils/tw-merge';
+import { usePlacesStore } from '@/store/user-place-store';
+
+// interface Place {
+//   category_group_name: string;
+//   place_name: string;
+//   road_address_name: string;
+// }
 
 function SaveButton({
-  selectedPlaces,
   targetPath,
   disabled,
 }: {
-  selectedPlaces: any[];
   targetPath: string;
   disabled: boolean;
 }) {
+  const { places } = usePlacesStore();
   const router = useRouter();
 
   const handleSave = () => {
@@ -18,13 +24,13 @@ function SaveButton({
       return;
     }
 
-    if (selectedPlaces.length === 0) {
+    if (places.length === 0) {
       alert('저장할 장소를 선택해주세요!');
       return;
     }
 
     const query = new URLSearchParams({
-      places: JSON.stringify(selectedPlaces),
+      places: JSON.stringify(places),
     }).toString();
     const url = `${targetPath}?${query}`;
 
