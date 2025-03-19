@@ -17,7 +17,7 @@ function PlaceSearch({ onSearch }: PlaceSearchProps) {
   }
   return (
     <>
-      <form onSubmit={handleSubmit} className={tm('mb-[32px]')}>
+      <form onSubmit={handleSubmit}>
         <label className="sr-only">장소 검색</label>
         <div
           className={tm(

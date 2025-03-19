@@ -141,16 +141,9 @@ function KakaoMap() {
   };
 
   const addMarker = (position: any, idx: number) => {
-    // 마커를 표시하는 함수
-    // const imageSrc =
-    //   'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png';
     const imageSrc = '/black-map.svg';
     const imageSize = new window.kakao.maps.Size(36, 37);
-    const imgOptions = {
-      spriteSize: new window.kakao.maps.Size(36, 691),
-      spriteOrigin: new window.kakao.maps.Point(0, idx * 46 + 10),
-      offset: new window.kakao.maps.Point(13, 37),
-    };
+
     const markerImage = new window.kakao.maps.MarkerImage(imageSrc, imageSize);
     const marker = new window.kakao.maps.Marker({
       position: position,
@@ -170,34 +163,6 @@ function KakaoMap() {
     }
     setMarkers([]);
   };
-
-  // const displayPagination = (pagination: any) => {
-  //   const paginationEl = document.getElementById('pagination')!;
-  //   const fragment = document.createDocumentFragment();
-
-  //   while (paginationEl.hasChildNodes()) {
-  //     paginationEl.removeChild(paginationEl.lastChild!);
-  //   }
-
-  //   for (let i = 1; i <= pagination.last; i++) {
-  //     const el = document.createElement('a');
-  //     el.href = '#';
-  //     el.innerHTML = i.toString();
-
-  //     if (i === pagination.current) {
-  //       el.className = 'on';
-  //     } else {
-  //       el.onclick = (function (i) {
-  //         return function () {
-  //           pagination.gotoPage(i);
-  //         };
-  //       })(i);
-  //     }
-
-  //     fragment.appendChild(el);
-  //   }
-  //   paginationEl.appendChild(fragment);
-  // };
 
   const displayInfowindow = (marker: any, title: string) => {
     const content = '<div style="padding:5px;z-index:1;">' + title + '</div>';
@@ -242,8 +207,14 @@ function KakaoMap() {
           priority={true}
         />
       </button>
-      <PlaceSearch onSearch={handleSearch} />
-      <div ref={mapRef} style={{ width: '100%', height: '400px' }}></div>
+      <div className="mb-5 mt-4">
+        <PlaceSearch onSearch={handleSearch} />
+      </div>
+      <div
+        ref={mapRef}
+        className="mb-3"
+        style={{ width: '100%', height: '400px' }}
+      ></div>
       <div id="menu_wrap" className="bg_white">
         <ul id="placesList"></ul>
       </div>
