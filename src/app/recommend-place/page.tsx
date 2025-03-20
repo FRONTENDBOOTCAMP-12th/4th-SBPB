@@ -47,20 +47,15 @@ async function RecommendPlacePage() {
     <section>
       <ThemeBar />
       <TagFilter tags={tags} />
-      <ul>
+      <ul className="mb-20">
         {posts?.map((post) => {
-          const tags = post.tags.split(',');
-          const images = [post.image_url, ...post.other_images];
-          const userId = post.user_id;
-
-          return (
-            <PostCard
-              key={post.id}
-              tags={tags}
-              images={images}
-              userId={userId}
-            />
-          );
+          const postInfo = {
+            tags: post.tags.split(','),
+            images: [post.image_url, ...post.other_images],
+            userId: post.user_id,
+            postId: post.id,
+          };
+          return <PostCard key={postInfo.postId} postData={postInfo} />;
         })}
       </ul>
       <NavItems />
