@@ -8,6 +8,7 @@ export const useUserProfileStore = create<UserProfileState>((set, get) => ({
   user: null,
   userInfo: null,
   stats: { posts: 0, photos: 0, following: 0, followers: 0 },
+  refreshFeedFlag: 0,
 
   fetchUser: async () => {
     const { data: sessionData } = await supabase.auth.getSession();
@@ -79,6 +80,13 @@ export const useUserProfileStore = create<UserProfileState>((set, get) => ({
     });
   },
 
+  // 상태 값을 증가시켜 피드 리렌더링
+  // 숫자 상태 refreshFeedFlag가 바뀌면 feed-card-list에서 감지해서 useEffect 실행됨
+  triggerFeedRefresh: () =>
+    set((state) => ({
+      refreshFeedFlag: state.refreshFeedFlag + 1,
+    })),
+
   updateProfileImage: async (file: File) => {
     const { user } = useUserProfileStore.getState();
     if (!user || !user.id) {
@@ -113,6 +121,7 @@ export const useUserProfileStore = create<UserProfileState>((set, get) => ({
     }
 
     await get().fetchUser();
+    get().triggerFeedRefresh();
   },
 
   logout: async () => {
@@ -141,6 +150,7 @@ export const useUserProfileStore = create<UserProfileState>((set, get) => ({
       set((state) => ({
         userInfo: state.userInfo ? { ...state.userInfo, nickname } : null,
       }));
+      get().triggerFeedRefresh();
     }
   },
 }));

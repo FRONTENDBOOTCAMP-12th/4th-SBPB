@@ -14,6 +14,7 @@ function Profile() {
     updateProfileImage,
     logout,
     updateNickname,
+    triggerFeedRefresh,
   } = useUserProfileStore();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isEditing, setIsEditing] = useState<boolean>(false);
@@ -24,6 +25,7 @@ function Profile() {
   const handleNicknameSave = async () => {
     if (nicknameInput.trim() && nicknameInput !== userInfo?.nickname) {
       await updateNickname(nicknameInput); // supabase에 업데이트
+      triggerFeedRefresh();
       setIsEditing(false);
     } else {
       setIsEditing(false); // 변경 없으면 취소
