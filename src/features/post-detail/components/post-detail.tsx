@@ -47,11 +47,13 @@ export default function PostDetail() {
       []), // null, undefined 제거하고 string만 필터링
   ];
 
+  console.log(formatDate(postData.created_at));
+
   return (
     <div className="bg-gray-50 h-screen">
       <Profile />
       <div className="pt-3 pb-4">
-        <PostHeader createdAt={formatDate(postData.created_at)} />
+        {postData.created_at && <PostHeader createdAt={postData.created_at} />}
       </div>
 
       <div className="post-detail-card bg-white h-[50%] min-h-[540px] w-[40%] min-w-[288px] rounded-2xl mx-auto shadow">
@@ -59,7 +61,9 @@ export default function PostDetail() {
           <PostImageSlider images={images} />
         </div>
 
-        <PostContent title={postData.title} content={postData.description} />
+        <div className="h-[138px] overflow-scroll">
+          <PostContent title={postData.title} content={postData.description} />
+        </div>
 
         <div className="pl-3 pb-8 pt-2 rounded-b-2xl border-dashed border-t-1 border-gray-400">
           <PostSubsection
