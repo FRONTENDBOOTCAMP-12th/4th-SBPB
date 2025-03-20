@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { FollowToggleBtnProps } from '@/features/feed/types/follow-toggle-btn-props';
+import { useUserProfileStore } from '@/store/user-profile-store';
 
 function FollowToggleBtn({
   currentUserId,
@@ -35,6 +36,8 @@ function FollowToggleBtn({
 
       if (data.success) {
         setIsFollowing(!isFollowing);
+        const { fetchUser } = useUserProfileStore.getState();
+        await fetchUser(); // 프로필 컴포넌트를 리렌더링하기 위해 user 상태를 새로고침
       } else {
         console.error('API 실패:', data.error);
       }

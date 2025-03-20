@@ -5,12 +5,14 @@ import { useSortStore } from '@/store/sort-store';
 import { useUserProfileStore } from '@/store/user-profile-store';
 import { useRouter } from 'next/navigation';
 import FeedCard from './feed-card';
+import TagBar from './tag-bar';
 import {
   FeedCardProps,
   SortOption,
   UserProps,
   PostType,
 } from '@/features/feed/types/feed-card-props';
+import FeedSortDropdown from './feed-sort-dropdown';
 
 // feed-card-list.tsx : 데이터 불러오기, 게시글 정렬
 
@@ -21,6 +23,7 @@ export default function FeedCardList() {
 
   const [posts, setPosts] = useState<FeedCardProps[]>([]);
   const [expandedPostId, setExpandedPostId] = useState<string | null>(null);
+  const [selectedTag, setSelectedTag] = useState('all');
   const router = useRouter();
 
   useEffect(() => {
@@ -30,7 +33,13 @@ export default function FeedCardList() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const res = await fetch(`/api/feed-card-list?sortType=${sortType}`);
+        const queryParams = new URLSearchParams({ sortType });
+        if (selectedTag !== 'all') {
+          queryParams.append('tag', selectedTag);
+        }
+        const res = await fetch(
+          `/api/feed-card-list?${queryParams.toString()}`
+        );
         const data = await res.json();
 
         if (!data.success) {
@@ -85,7 +94,7 @@ export default function FeedCardList() {
     };
 
     fetchPosts();
-  }, [sortType]);
+  }, [sortType, selectedTag]);
 
   const handleCardClick = (postId: string) => {
     router.push(`/post-detail?postId=${postId}`); // 상세 페이지로 이동
@@ -93,6 +102,8 @@ export default function FeedCardList() {
 
   return (
     <div className="w-full flex flex-col items-center">
+      <TagBar selectedTag={selectedTag} setSelectedTag={setSelectedTag} />
+      <FeedSortDropdown />
       {posts.length === 0 ? (
         <div className="py-4 px-4 text-center text-content-secondary">
           로딩 중...

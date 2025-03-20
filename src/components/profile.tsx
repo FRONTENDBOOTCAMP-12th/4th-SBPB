@@ -1,14 +1,39 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useUserProfileStore } from '@/store/user-profile-store';
 import Image from 'next/image';
 import Link from 'next/link';
 
 function Profile() {
-  const { user, userInfo, stats, fetchUser, updateProfileImage, logout } =
-    useUserProfileStore();
+  const {
+    user,
+    userInfo,
+    stats,
+    fetchUser,
+    updateProfileImage,
+    logout,
+    updateNickname,
+  } = useUserProfileStore();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [nicknameInput, setNicknameInput] = useState<string>(
+    userInfo?.nickname || ''
+  );
+
+  const handleNicknameSave = async () => {
+    if (nicknameInput.trim() && nicknameInput !== userInfo?.nickname) {
+      await updateNickname(nicknameInput); // supabase에 업데이트
+      setIsEditing(false);
+    } else {
+      setIsEditing(false); // 변경 없으면 취소
+    }
+  };
+
+  // useEffect로 유저 정보 새로 불러왔을 때 input 초기화
+  useEffect(() => {
+    setNicknameInput(userInfo?.nickname || '');
+  }, [userInfo]);
 
   useEffect(() => {
     fetchUser();
@@ -113,7 +138,45 @@ function Profile() {
       </div>
 
       <div className={`flex flex-col`}>
-        <p className={`font-semibold pb-1`}>{userInfo?.nickname || '닉네임'}</p>
+        {isEditing ? (
+          <div className={`flex items-center gap-2 pb-1`}>
+            <input
+              type="text"
+              value={nicknameInput}
+              onChange={(e) => setNicknameInput(e.target.value)}
+              className={`w-24 px-2 py-1 text-white rounded-sm 
+								text-sm border border-white`}
+            />
+            <button
+              onClick={handleNicknameSave}
+              className={`text-xs bg-white text-primary
+								py-1 px-2 rounded-sm
+								hover:bg-accent duration-300`}
+            >
+              저장
+            </button>
+          </div>
+        ) : (
+          <p
+            className={`flex items-center gap-2 font-semibold pb-1`}
+            onClick={() => setIsEditing(true)}
+          >
+            {nicknameInput || '닉네임'}{' '}
+            <span
+              className={`text-xs bg-white text-primary
+								p-1.5 rounded-full
+								hover:bg-accent duration-300`}
+            >
+              <Image
+                src="/pen.svg"
+                alt="프로필 이미지 변경"
+                width={14}
+                height={14}
+              />
+            </span>
+          </p>
+        )}
+
         <ul className={`w-full flex gap-2 text-xs`}>
           <li
             className={`relative pr-3 text-center 

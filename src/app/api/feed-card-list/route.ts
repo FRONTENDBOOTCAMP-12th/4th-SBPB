@@ -7,6 +7,7 @@ export async function GET(req: Request) {
     const supabase = await createClient();
     const { searchParams } = new URL(req.url);
     const sortType = searchParams.get('sortType') || 'latest';
+    const tag = searchParams.get('tag');
 
     let query = supabase.from('post').select(`
         id, 
@@ -14,8 +15,13 @@ export async function GET(req: Request) {
         image_url, 
         thumbs,
         created_at,
+        tags,
         user: userinfo!inner(id, nickname, profile_path, user_id)
       `);
+
+    if (tag && tag !== 'all') {
+      query = query.ilike('tags', `%${tag}%`);
+    }
 
     if (sortType === 'latest') {
       query = query.order('created_at', { ascending: false }); // 최신순 정렬
