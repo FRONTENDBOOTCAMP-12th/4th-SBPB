@@ -15,8 +15,6 @@ function PostPlacePage() {
   const placesParam = searchParams.get('places');
   const initialPlaces: Place[] = placesParam ? JSON.parse(placesParam) : [];
 
-  console.log(initialPlaces);
-
   return (
     <div className={tm('px-[17px]', 'pt-[24px]', 'relative')}>
       <CloseButton />

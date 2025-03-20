@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -36,9 +36,12 @@ const navItems: NavItem[] = [
 
 function NavItems() {
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
-  // 로컬 스토리지에서 isAuth 키 값을 확인
-  const isAuthenticated = localStorage.getItem('isAuth');
+  useEffect(() => {
+    const authStatus = localStorage.getItem('isAuth');
+    setIsAuthenticated(authStatus === 'true'); // 'true'로 저장된 값이 있으면 로그인 상태로 간주
+  }, []);
 
   const handleClick = (id: string) => {
     setSelectedItem(id);
