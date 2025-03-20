@@ -7,6 +7,8 @@ import PostCreateInput from '@/features/register-post/components/post-create-inp
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import TagInput from './tag-input';
+import { usePlacesStore } from '@/store/user-place-store';
+import { useUserProfileStore } from '@/store/user-profile-store';
 
 // IndexedDB에서 파일을 불러오는 함수
 const loadFilesFromIndexedDB = () => {
@@ -34,14 +36,21 @@ const loadFilesFromIndexedDB = () => {
 };
 
 export default function PostCreate() {
+  const { userInfo, fetchUser } = useUserProfileStore();
+
   const [title, setTitle] = useState('');
   const [tags, setTags] = useState<string[]>([]);
   const [description, setDescription] = useState('');
   const [bgImage, setBgImage] = useState<string | null>(null);
+  const { places } = usePlacesStore(); // zustand에서 places 상태 가져오기
   const router = useRouter();
+  const userId = userInfo?.id ? userInfo.id : 0;
+
+  const placeNames = places.map((place) => place.place_name).join(', ');
 
   // 페이지가 로드될 때 IndexedDB에서 파일을 불러와 첫 번째 이미지를 배경으로 설정
   useEffect(() => {
+    fetchUser();
     const fetchFilesAndSetBgImage = async () => {
       try {
         const files = await loadFilesFromIndexedDB();
@@ -57,7 +66,7 @@ export default function PostCreate() {
       }
     };
     fetchFilesAndSetBgImage();
-  }, []);
+  }, [fetchUser]);
 
   const handleUpload = async () => {
     if (!bgImage) {
@@ -72,6 +81,8 @@ export default function PostCreate() {
       formData.append('title', title);
       formData.append('tags', tags.join(','));
       formData.append('description', description);
+      formData.append('location', placeNames);
+      formData.append('user_id', userId.toString());
 
       files.forEach((fileObj) => {
         formData.append('files', fileObj.content);

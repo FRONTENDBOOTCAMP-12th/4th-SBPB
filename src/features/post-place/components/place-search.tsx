@@ -3,11 +3,9 @@ import { tm } from '@/utils/tw-merge';
 import Image from 'next/image';
 import { FormEvent, useState } from 'react';
 
-interface PlaceSearchProps {
-  onSearch: (place: string) => void;
-}
+import { PlaceSearchProps } from '@/features/post-place/types/place-type';
 
-function PlaceSearch({ onSearch }: PlaceSearchProps) {
+function PlaceSearch({ onSearch, disabled = false }: PlaceSearchProps) {
   const [inputValue, setInputValue] = useState('');
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
@@ -15,9 +13,10 @@ function PlaceSearch({ onSearch }: PlaceSearchProps) {
     onSearch(inputValue.trim());
     setInputValue('');
   }
+
   return (
     <>
-      <form onSubmit={handleSubmit} className={tm('mb-[32px]')}>
+      <form onSubmit={handleSubmit}>
         <label className="sr-only">장소 검색</label>
         <div
           className={tm(
@@ -32,23 +31,24 @@ function PlaceSearch({ onSearch }: PlaceSearchProps) {
           <input
             type="search"
             name="place"
-            placeholder="원하는 지역을 검색해 보세요"
-            className={tm('w-full', 'text-xs')}
+            placeholder="지번,도로명,건물명으로 검색"
+            className={tm('w-full', 'text-xs', 'cursor-pointer')}
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
+            disabled={disabled}
           />
           <button
             type="submit"
             title="검색"
             aria-label="검색"
             className={tm('cursor-pointer opacity-90')}
+            disabled={disabled}
           >
             <Image
               src="/search-bar-icon.svg"
               width={18}
               height={18}
               alt="검색"
-              priority={true}
             />
           </button>
         </div>

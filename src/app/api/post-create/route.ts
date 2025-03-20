@@ -6,6 +6,8 @@ export async function POST(req: NextRequest) {
   const title = formData.get('title') as string;
   const tags = formData.get('tags') as string;
   const description = formData.get('description') as string;
+  const location = formData.get('location') as string;
+  const userId = Number(formData.get('user_id'));
   const files = formData.getAll('files') as File[];
 
   const supabase = createClient();
@@ -42,8 +44,10 @@ export async function POST(req: NextRequest) {
       .insert([
         {
           title,
+          user_id: userId,
           tags,
           description,
+          location,
           image_url: imageUrls[0],
           other_images: imageUrls.slice(1),
         },
