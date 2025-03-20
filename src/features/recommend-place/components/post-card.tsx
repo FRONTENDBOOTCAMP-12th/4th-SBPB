@@ -3,6 +3,8 @@
 import Image from 'next/image';
 import TagItem from './tag-item';
 import Link from 'next/link';
+import { useState } from 'react';
+import { tm } from '@/utils/tw-merge';
 
 interface PostCardProps {
   tags: string[] | undefined;
@@ -17,13 +19,23 @@ interface PostCardProps {
 }
 
 function PostCard({ tags, images, postId, userInfo }: PostCardProps) {
+  const [isFollow, setIsFollow] = useState(false);
+
+  const handleFollowClick = () => {
+    setIsFollow((prev) => !prev);
+  };
+
   return (
     <article className="relative py-3.5 px-3 bg-gray-50">
       <button
+        onClick={handleFollowClick}
         type="button"
-        className="bg-content-primary text-white px-3.5 py-1.5 rounded-full text-xs self-center absolute top-[15px] right-[10px]"
+        className={tm(
+          'bg-content-primary text-white px-3.5 py-1.5 rounded-full text-xs self-center absolute top-[15px] right-[10px]',
+          { 'text-white bg-accent': isFollow }
+        )}
       >
-        팔로우
+        {isFollow ? '팔로잉' : '팔로우'}
       </button>
       <Link href={`/post-detail?postId=${postId}`}>
         <div className="flex gap-2">
@@ -56,7 +68,7 @@ function PostCard({ tags, images, postId, userInfo }: PostCardProps) {
               className="w-[100px] h-[100px] object-cover"
               key={idx}
               src={image!}
-              alt="부산"
+              alt={`${userInfo!.nickname}의 게시글 컨텐츠`}
               width={100}
               height={100}
             />

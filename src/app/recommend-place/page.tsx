@@ -55,10 +55,25 @@ async function RecommendPlacePage() {
 
   const userMap = new Map(userData?.map((user) => [user.id, user]));
 
+  const { data: signInUser, error } = await supabase.auth.getUser();
+
+  if (error) return;
+
+  const { data: areaData, error: areaError } = await supabase
+    .from('userinfo')
+    .select('interested_area')
+    .eq('user_id', signInUser.user.id);
+
+  if (areaError) {
+    console.error(areaError);
+    return;
+  }
+
   return (
     <RecommendPlaceClient
       posts={posts}
       tags={tags}
+      areas={areaData[0]}
       userMap={Object.fromEntries(userMap)}
     />
   );

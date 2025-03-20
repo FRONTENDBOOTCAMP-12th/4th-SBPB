@@ -1,11 +1,15 @@
 'use client';
 
 import { tm } from '@/utils/tw-merge';
-import { useState } from 'react';
+import { SetStateAction } from 'react';
 
-function ThemeBar() {
-  const [theme, setTheme] = useState<'전국 여행지' | '관심지역'>('전국 여행지');
-
+function ThemeBar({
+  theme,
+  setTheme,
+}: {
+  theme: string;
+  setTheme: React.Dispatch<SetStateAction<string>>;
+}) {
   return (
     <article className="flex justify-center gap-1">
       <button
