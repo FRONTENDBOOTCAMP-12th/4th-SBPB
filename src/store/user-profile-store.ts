@@ -81,7 +81,7 @@ export const useUserProfileStore = create<UserProfileState>((set, get) => ({
   },
 
   // 상태 값을 증가시켜 피드 리렌더링
-  // 숫자 상태 refreshFeedFlag가 바뀌면 피드에서 감지해서 useEffect 실행됨
+  // 숫자 상태 refreshFeedFlag가 바뀌면 feed-card-list에서 감지해서 useEffect 실행됨
   triggerFeedRefresh: () =>
     set((state) => ({
       refreshFeedFlag: state.refreshFeedFlag + 1,
