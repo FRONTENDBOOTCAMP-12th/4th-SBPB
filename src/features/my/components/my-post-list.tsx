@@ -60,9 +60,9 @@ export default function MyPostList() {
         ];
 
         return (
-          <div key={index + 1}>
+          <div key={index}>
             <div className="pt-3 pb-4">
-              <PostHeader postNumber={index} />
+              <PostHeader postNumber={index + 1} />
             </div>
 
             <div className="post-detail-card bg-white h-[50%] min-h-[540px] w-[40%] min-w-[288px] rounded-2xl mx-auto shadow-right mb-10">
