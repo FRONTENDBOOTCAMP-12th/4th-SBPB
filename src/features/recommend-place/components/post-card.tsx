@@ -1,16 +1,17 @@
 'use client';
 
-import Image from 'next/image';
-import TagItem from './tag-item';
-import Link from 'next/link';
-import { useState } from 'react';
+import { createClient } from '@/utils/supabase/client';
 import { tm } from '@/utils/tw-merge';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import TagItem from './tag-item';
 
 interface PostCardProps {
   tags: string[] | undefined;
   images: (string | null)[];
-  userId: number | null;
   postId: number;
+  userId?: number | null;
   userInfo?: {
     id: number | string;
     nickname: string;
@@ -18,25 +19,98 @@ interface PostCardProps {
   };
 }
 
-function PostCard({ tags, images, postId, userInfo }: PostCardProps) {
+function PostCard({ tags, images, userId, postId, userInfo }: PostCardProps) {
   const [isFollow, setIsFollow] = useState(false);
+  const [currentUser, setCurrentUser] = useState<string>('');
+  const [targetUser, setTargetUser] = useState<number | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const handleFollowClick = () => {
-    setIsFollow((prev) => !prev);
+  const supabase = createClient();
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const res = await fetch('/api/get-user');
+      const user = await res.json();
+
+      const { data: targetUser, error } = await supabase
+        .from('userinfo')
+        .select('user_id')
+        .eq('id', userId);
+
+      if (error) {
+        console.error(error.message);
+        return;
+      }
+
+      const current = user.user.id;
+      const target = targetUser?.[0].user_id;
+
+      setCurrentUser(current);
+      setTargetUser(target);
+
+      const resFollow = await fetch('/api/follow', {
+        method: 'POST',
+        body: JSON.stringify({
+          action: 'check',
+          followingUserId: current,
+          followUserId: target,
+        }),
+      });
+      const isFollowed = await resFollow.json();
+      setIsFollow(isFollowed.isFollowing);
+      setIsLoading(false);
+    };
+
+    fetchUser();
+  }, []);
+
+  const handleFollowClick = async () => {
+    const res = await fetch('/api/follow', {
+      method: 'POST',
+      body: JSON.stringify({
+        action: 'check',
+        followingUserId: currentUser,
+        followUserId: targetUser,
+      }),
+    });
+    const isFollowed = await res.json();
+    setIsFollow(isFollowed.isFollowing);
+    let bodyOption;
+    if (!isFollow) {
+      bodyOption = JSON.stringify({
+        action: 'follow',
+        followingUserId: currentUser,
+        followUserId: targetUser,
+      });
+      setIsFollow(true);
+    } else {
+      bodyOption = JSON.stringify({
+        action: 'unfollow',
+        followingUserId: currentUser,
+        followUserId: targetUser,
+      });
+      setIsFollow(false);
+    }
+    await fetch('/api/follow', {
+      method: 'POST',
+      body: bodyOption,
+    });
   };
 
   return (
     <article className="relative py-3.5 px-3 bg-gray-50">
-      <button
-        onClick={handleFollowClick}
-        type="button"
-        className={tm(
-          'bg-content-primary text-white px-3.5 py-1.5 rounded-full text-xs self-center absolute top-[15px] right-[10px]',
-          { 'text-white bg-accent': isFollow }
-        )}
-      >
-        {isFollow ? '팔로잉' : '팔로우'}
-      </button>
+      {!isLoading && (
+        <button
+          onClick={handleFollowClick}
+          type="button"
+          className={tm(
+            'bg-content-primary text-white px-3.5 py-1.5 rounded-full text-xs self-center absolute top-[15px] right-[10px]',
+            { 'text-white bg-accent': isFollow }
+          )}
+        >
+          {isFollow ? '팔로잉' : '팔로우'}
+        </button>
+      )}
       <Link href={`/post-detail?postId=${postId}`}>
         <div className="flex gap-2">
           <Image
