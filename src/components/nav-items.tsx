@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-
 import { toast } from 'react-toastify'; // react-toastify import
 
 interface NavItem {
@@ -39,8 +38,11 @@ function NavItems() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
   useEffect(() => {
-    const authStatus = localStorage.getItem('isAuth');
-    setIsAuthenticated(authStatus === 'true'); // 'true'로 저장된 값이 있으면 로그인 상태로 간주
+    // 클라이언트 사이드에서만 localStorage 접근
+    if (typeof window !== 'undefined') {
+      const authStatus = localStorage.getItem('isAuth') ? true : false;
+      setIsAuthenticated(authStatus); // 'true'로 저장된 값이 있으면 로그인 상태로 간주
+    }
   }, []);
 
   const handleClick = (id: string) => {
@@ -52,6 +54,10 @@ function NavItems() {
       return; // 링크로 진입하지 않음
     }
   };
+
+  if (isAuthenticated === null) {
+    return null;
+  }
 
   return (
     <nav className="bg-white fixed bottom-0 left-0 right-0">
