@@ -26,7 +26,7 @@ const navItems: NavItem[] = [
   {
     id: 'subway',
     src: '/subway.svg',
-    href: '#',
+    href: '/recommend-place',
     alt: '여행지추천',
     label: '여행지추천',
   },
