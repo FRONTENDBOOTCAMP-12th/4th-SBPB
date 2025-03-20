@@ -9,6 +9,7 @@ interface UserInfo {
   nickname: string;
   email: string;
   profile_path: string | null;
+  created_at: string | null;
 }
 
 interface UserStats {
