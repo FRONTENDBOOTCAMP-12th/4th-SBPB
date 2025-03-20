@@ -1,12 +1,6 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
-
-interface PlaceItemProps {
-  index: number;
-  place: any;
-  onClick: (place: any, marker: any) => void;
-  marker: any; // marker를 추가로 전달받음
-}
+import { PlaceItemProps } from '@/features/post-place/types/place-type';
 
 const PlaceItem: React.FC<PlaceItemProps> = ({
   index,

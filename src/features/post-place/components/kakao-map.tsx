@@ -87,6 +87,9 @@ function KakaoMap() {
         places[i].x
       );
       const marker = addMarker(placePosition);
+
+      console.log(marker);
+      console.log(places[i]);
       newMarkers.push(marker);
 
       bounds.extend(placePosition);

@@ -3,12 +3,6 @@ import Image from 'next/image';
 import { tm } from '@/utils/tw-merge';
 import { usePlacesStore } from '@/store/user-place-store';
 
-// interface Place {
-//   category_group_name: string;
-//   place_name: string;
-//   road_address_name: string;
-// }
-
 function SaveButton({
   targetPath,
   disabled,

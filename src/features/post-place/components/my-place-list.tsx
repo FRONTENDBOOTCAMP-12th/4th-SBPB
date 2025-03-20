@@ -3,15 +3,7 @@ import { tm } from '@/utils/tw-merge';
 import Image from 'next/image';
 import { useEffect } from 'react';
 import { usePlacesStore } from '@/store/user-place-store';
-
-interface Place {
-  road_address_name: string;
-  place_name: string;
-}
-
-interface MyPlaceListProps {
-  initialPlaces: Place[];
-}
+import { MyPlaceListProps } from '@/features/post-place/types/place-type';
 
 function MyPlaceList({ initialPlaces }: MyPlaceListProps) {
   // Zustand로 관리되는 places 상태

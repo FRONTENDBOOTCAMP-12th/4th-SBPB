@@ -3,10 +3,7 @@ import { tm } from '@/utils/tw-merge';
 import Image from 'next/image';
 import { FormEvent, useState } from 'react';
 
-interface PlaceSearchProps {
-  onSearch: (place: string) => void;
-  disabled?: boolean;
-}
+import { PlaceSearchProps } from '@/features/post-place/types/place-type';
 
 function PlaceSearch({ onSearch, disabled = false }: PlaceSearchProps) {
   const [inputValue, setInputValue] = useState('');

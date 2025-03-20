@@ -8,11 +8,7 @@ import MyPlaceList from './my-place-list';
 import Link from 'next/link';
 import SaveButton from './save-button';
 import CloseButton from './close-button';
-
-export interface Place {
-  road_address_name: string;
-  place_name: string;
-}
+import { Place } from '@/features/post-place/types/place-type';
 
 function PostPlacePage() {
   const searchParams = useSearchParams();

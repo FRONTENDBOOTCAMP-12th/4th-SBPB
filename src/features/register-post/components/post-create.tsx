@@ -36,10 +36,7 @@ const loadFilesFromIndexedDB = () => {
 };
 
 export default function PostCreate() {
-  const { user, userInfo, fetchUser } = useUserProfileStore();
-
-  console.log(user);
-  console.log(userInfo);
+  const { userInfo, fetchUser } = useUserProfileStore();
 
   const [title, setTitle] = useState('');
   const [tags, setTags] = useState<string[]>([]);
@@ -48,8 +45,6 @@ export default function PostCreate() {
   const { places } = usePlacesStore(); // zustand에서 places 상태 가져오기
   const router = useRouter();
   const userId = userInfo?.id ? userInfo.id : 0;
-
-  console.log(userId);
 
   const placeNames = places.map((place) => place.place_name).join(', ');
 
