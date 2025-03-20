@@ -24,7 +24,10 @@ export interface UserProfileState {
   userInfo: UserInfo | null;
   stats: UserStats;
   fetchUser: () => Promise<void>;
-  fetchUserStats: (userId: number) => Promise<void>;
+  fetchUserStats: () => Promise<void>;
   updateProfileImage: (file: File) => Promise<void>;
+  updateNickname: (nickname: string) => Promise<void>;
   logout: () => Promise<void>;
+  refreshFeedFlag: number;
+  triggerFeedRefresh: () => void;
 }

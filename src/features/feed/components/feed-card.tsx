@@ -43,7 +43,10 @@ export default function FeedCard({
     <div
       ref={isLastPost ? lastPostRef : null}
       id={`post-${postId}`}
-      className="pt-4 pb-6 px-4 bg-white w-full border border-t-0 border-b-0 border-l-[#eee] border-r-[#eee]"
+      className={tm(
+        'pt-4 pb-6 px-4 bg-white w-full border border-t-0 border-b-0 border-l-[#eee] border-r-[#eee]',
+        isLastPost && 'border-b border-b-[#eee]' // 마지막 게시글만 border-bottom 추가
+      )}
     >
       <div className="flex items-center gap-3 relative">
         {/* 프로필 이미지 */}

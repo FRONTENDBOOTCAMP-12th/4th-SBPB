@@ -1,7 +1,11 @@
 'use client';
 
 import { tm } from '@/utils/tw-merge';
-import { useState } from 'react';
+
+interface TagBarProps {
+  selectedTag: string;
+  setSelectedTag: (tag: string) => void;
+}
 
 interface TagTypes {
   id: string;
@@ -11,15 +15,13 @@ interface TagTypes {
 
 const Tags: TagTypes[] = [
   { id: 'tag-all', value: 'all', label: '전체' },
-  { id: 'tag-dev', value: 'dev', label: '팔로잉' },
-  { id: 'tag-autumn', value: 'autumn', label: '가을' },
-  { id: 'tag-korean', value: 'korean', label: '한식' },
-  { id: 'tag-food', value: 'food', label: '맛집' },
+  { id: 'tag-cafe', value: '카페', label: '카페' },
+  { id: 'tag-summer', value: '여름', label: '여름' },
+  { id: 'tag-korean', value: '한식', label: '한식' },
+  { id: 'tag-food', value: '맛집', label: '맛집' },
 ];
 
-function TagBar() {
-  const [selectedTag, setSelectedTag] = useState<TagTypes['value']>('all');
-
+function TagBar({ selectedTag, setSelectedTag }: TagBarProps) {
   return (
     <fieldset className="w-full bg-[#eeeeee]">
       <legend className="sr-only">태그 선택</legend>
@@ -34,11 +36,9 @@ function TagBar() {
             key={tag.id}
             htmlFor={tag.id}
             tabIndex={0}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                setSelectedTag(tag.value);
-              }
-            }}
+            onKeyDown={(e) =>
+              (e.key === 'Enter' || e.key === ' ') && setSelectedTag(tag.value)
+            }
             className={tm(`
               w-13.5 h-9 text-xs font-semibold rounded-sm cursor-pointer 
               flex justify-center items-center bg-white hover:bg-accent/80 duration-300
