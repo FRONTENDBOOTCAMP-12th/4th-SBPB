@@ -1,7 +1,4 @@
-import NavItems from '@/components/nav-items';
-import PostCard from '@/features/recommend-place/components/post-card';
-import TagFilter from '@/features/recommend-place/components/tag-filter';
-import ThemeBar from '@/features/recommend-place/components/theme-bar';
+import RecommendPlaceClient from '@/features/recommend-place/components/recommend-place-client';
 import { createClient } from '@/utils/supabase/server';
 import { Metadata } from 'next';
 
@@ -43,23 +40,27 @@ async function RecommendPlacePage() {
     );
   }
 
+  const userIds = [...new Set(posts?.map((post) => post.user_id))];
+
+  // 유저 정보 가져오기
+  const { data: userData, error: userError } = await supabase
+    .from('userinfo')
+    .select('id, nickname, profile_path')
+    .in('id', userIds);
+
+  if (userError) {
+    console.error('유저 정보 로드 중 에러 :', userError);
+    return;
+  }
+
+  const userMap = new Map(userData?.map((user) => [user.id, user]));
+
   return (
-    <section>
-      <ThemeBar />
-      <TagFilter tags={tags} />
-      <ul className="mb-20">
-        {posts?.map((post) => {
-          const postInfo = {
-            tags: post.tags.split(','),
-            images: [post.image_url, ...post.other_images],
-            userId: post.user_id,
-            postId: post.id,
-          };
-          return <PostCard key={postInfo.postId} postData={postInfo} />;
-        })}
-      </ul>
-      <NavItems />
-    </section>
+    <RecommendPlaceClient
+      posts={posts}
+      tags={tags}
+      userMap={Object.fromEntries(userMap)}
+    />
   );
 }
 

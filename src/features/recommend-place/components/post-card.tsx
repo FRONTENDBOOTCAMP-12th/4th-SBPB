@@ -1,35 +1,22 @@
+'use client';
+
 import Image from 'next/image';
 import TagItem from './tag-item';
-import { createClient } from '@/utils/supabase/server';
 import Link from 'next/link';
 
 interface PostCardProps {
-  postData: {
-    tags: string[];
-    images: string[];
-    userId: string;
-    postId: string;
+  tags: string[] | undefined;
+  images: (string | null)[];
+  userId: number | null;
+  postId: number;
+  userInfo?: {
+    id: number | string;
+    nickname: string;
+    profile_path: string;
   };
 }
 
-async function PostCard({ postData }: PostCardProps) {
-  const supabase = await createClient();
-
-  const { tags, images, userId, postId } = postData;
-
-  // 유저 정보 가져오기
-  const { data: user, error } = await supabase
-    .from('userinfo')
-    .select('nickname, profile_path')
-    .eq('id', userId);
-
-  if (error) {
-    console.error('유저 정보를 갖고 오는 중 에러발생 :', error);
-  }
-
-  const profile = user?.[0].profile_path ?? '';
-  const nickname = user?.[0].nickname ?? '닉네임 없음';
-
+function PostCard({ tags, images, postId, userInfo }: PostCardProps) {
   return (
     <article className="relative py-3.5 px-3 bg-gray-50">
       <button
@@ -41,23 +28,21 @@ async function PostCard({ postData }: PostCardProps) {
       <Link href={`/post-detail?postId=${postId}`}>
         <div className="flex gap-2">
           <Image
-            src={profile}
-            alt={nickname}
+            src={userInfo!.profile_path}
+            alt={userInfo!.nickname}
             width={30}
             height={30}
             className="rounded-2xl w-[30px] h-[30px] object-cover"
           />
           <div className="flex flex-col mr-auto">
-            <span className="text-xs font-semibold">{nickname}</span>
+            <span className="text-xs font-semibold">{userInfo!.nickname}</span>
             <span className="text-xs text-content-tertiary">
               게시글 112 • 팔로워 46
             </span>
           </div>
         </div>
         <ul className="flex gap-1 mt-3">
-          {tags.map((tag) => (
-            <TagItem tag={tag} key={tag} />
-          ))}
+          {tags?.map((tag) => <TagItem tag={tag} key={tag} />)}
         </ul>
         <div
           style={{
@@ -70,7 +55,7 @@ async function PostCard({ postData }: PostCardProps) {
             <Image
               className="w-[100px] h-[100px] object-cover"
               key={idx}
-              src={image}
+              src={image!}
               alt="부산"
               width={100}
               height={100}
