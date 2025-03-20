@@ -27,4 +27,6 @@ export interface UserProfileState {
   updateProfileImage: (file: File) => Promise<void>;
   updateNickname: (nickname: string) => Promise<void>;
   logout: () => Promise<void>;
+  refreshFeedFlag: number;
+  triggerFeedRefresh: () => void;
 }

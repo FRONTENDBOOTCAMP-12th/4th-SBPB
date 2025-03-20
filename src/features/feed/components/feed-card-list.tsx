@@ -18,7 +18,7 @@ import FeedSortDropdown from './feed-sort-dropdown';
 
 export default function FeedCardList() {
   const { sortType } = useSortStore();
-  const { user, fetchUser } = useUserProfileStore();
+  const { user, fetchUser, refreshFeedFlag } = useUserProfileStore();
   const currentUserId = user?.id || '';
 
   const [posts, setPosts] = useState<FeedCardProps[]>([]);
@@ -94,7 +94,7 @@ export default function FeedCardList() {
     };
 
     fetchPosts();
-  }, [sortType, selectedTag]);
+  }, [sortType, selectedTag, refreshFeedFlag]);
 
   const handleCardClick = (postId: string) => {
     router.push(`/post-detail?postId=${postId}`); // 상세 페이지로 이동
