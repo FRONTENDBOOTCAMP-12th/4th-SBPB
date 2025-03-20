@@ -7,6 +7,7 @@ import PostHeader from '@/features/post-detail/components/post-header';
 import PostImageSlider from '@/features/post-detail/components/post-image-slider';
 import PostSubsection from '@/features/post-detail/components/post-subsection';
 import { PostData } from '@/types/post-data-types';
+import formatDate from '@/utils/format-date';
 import { useState, useEffect } from 'react';
 
 export default function PostDetail() {
@@ -50,10 +51,10 @@ export default function PostDetail() {
     <div className="bg-gray-50 h-screen">
       <Profile />
       <div className="pt-3 pb-4">
-        <PostHeader />
+        <PostHeader createdAt={formatDate(postData.created_at)} />
       </div>
 
-      <div className="post-detail-card bg-white h-[50%] min-h-[540px] w-[40%] min-w-[288px] rounded-2xl mx-auto">
+      <div className="post-detail-card bg-white h-[50%] min-h-[540px] w-[40%] min-w-[288px] rounded-2xl mx-auto shadow">
         <div className="rounded-2xl">
           <PostImageSlider images={images} />
         </div>

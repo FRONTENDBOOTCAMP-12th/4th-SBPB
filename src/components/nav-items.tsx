@@ -30,7 +30,7 @@ const navItems: NavItem[] = [
     alt: '여행지추천',
     label: '여행지추천',
   },
-  { id: 'my', src: '/my.svg', href: '#', alt: 'MY', label: 'MY' },
+  { id: 'my', src: '/my.svg', href: '/my-page', alt: 'MY', label: 'MY' },
 ];
 
 function NavItems() {

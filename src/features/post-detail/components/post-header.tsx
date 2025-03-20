@@ -3,8 +3,10 @@
 import Image from 'next/image';
 import PostModal from '@/features/post-detail/components/post-modal';
 import { useState } from 'react';
+import { PostHeaderProps } from '../types/post-header-types';
+import formatDate from './../../../utils/format-date';
 
-function PostHeader() {
+function PostHeader({ createdAt, postNumber }: PostHeaderProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const toggleModal = () => setIsModalOpen((prevState) => !prevState);
@@ -25,7 +27,10 @@ function PostHeader() {
           alt="목록 아이콘"
         />
       </div>
-      <p className="font-Pretendard font-semibold">작성 일자</p>
+      <div className="font-Pretendard font-semibold">
+        {createdAt && <p> {formatDate(createdAt)}</p>}
+        {postNumber !== undefined && <p>No.{postNumber}</p>}
+      </div>
       <button
         type="button"
         className="ml-auto cursor-pointer"
