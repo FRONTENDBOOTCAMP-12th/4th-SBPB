@@ -29,8 +29,7 @@ export const metadata: Metadata = {
   },
 };
 
-const xNcpApiGwApiKeyId: string | undefined =
-  process.env.X_NCP_APIGW_API_KEY_ID;
+const KAKAO_API_KEY_ID: string | undefined = process.env.KAKAO_API_KEY_ID;
 
 export default function RootLayout({
   children,
@@ -43,7 +42,7 @@ export default function RootLayout({
         <Toast />
         {children}
         <Script
-          src="//dapi.kakao.com/v2/maps/sdk.js?appkey=ba7abec9b662a12ad566a98c84d18315&libraries=services&autoload=false"
+          src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_API_KEY_ID}&libraries=services&autoload=false`}
           strategy="beforeInteractive"
         />
       </body>

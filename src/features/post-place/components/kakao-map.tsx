@@ -4,7 +4,6 @@
 import { useRef, useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import { tm } from '@/utils/tw-merge';
-import Image from 'next/image';
 import PlaceSearch from './place-search';
 import PlaceItem from './place-item';
 import SaveButton from './save-button';
@@ -87,7 +86,7 @@ function KakaoMap() {
         places[i].y,
         places[i].x
       );
-      const marker = addMarker(placePosition, i);
+      const marker = addMarker(placePosition);
       newMarkers.push(marker);
 
       bounds.extend(placePosition);
@@ -141,7 +140,7 @@ function KakaoMap() {
     map.panTo(marker.getPosition());
   };
 
-  const addMarker = (position: any, idx: number) => {
+  const addMarker = (position: any) => {
     const imageSrc = '/black-map.svg';
     const imageSize = new window.kakao.maps.Size(36, 37);
 
