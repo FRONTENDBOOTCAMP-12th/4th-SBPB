@@ -4,7 +4,7 @@ import { UserProfileState } from '@/types/user-profile-type';
 
 const supabase = createClient();
 
-export const useUserProfileStore = create<UserProfileState>((set) => ({
+export const useUserProfileStore = create<UserProfileState>((set, get) => ({
   user: null,
   userInfo: null,
   stats: { posts: 0, photos: 0, following: 0, followers: 0 },
@@ -39,34 +39,35 @@ export const useUserProfileStore = create<UserProfileState>((set) => ({
     }
 
     set({ user: { id: user.user.id, email: userEmail }, userInfo });
-    await useUserProfileStore.getState().fetchUserStats(userInfo.id);
+    await useUserProfileStore.getState().fetchUserStats();
   },
 
-  fetchUserStats: async (userId: number) => {
-    if (!userId) {
-      console.error('유효하지 않은 userId:', userId);
+  fetchUserStats: async () => {
+    const { user, userInfo } = get();
+    if (!user || !userInfo) {
+      console.error('유효하지 않은 user 또는 userInfo');
       return;
     }
 
     const postCount = await supabase
       .from('post')
       .select('*', { count: 'exact' })
-      .eq('user_id', Number(userId));
+      .eq('user_id', userInfo.id);
 
     const photoCount = await supabase
       .from('post')
       .select('*', { count: 'exact' })
-      .eq('user_id', Number(userId));
+      .eq('user_id', userInfo.id);
 
     const followersCount = await supabase
       .from('follow')
       .select('*', { count: 'exact' })
-      .eq('follow_user_id', Number(userId));
+      .eq('follow_user_uuid', user.id);
 
     const followingCount = await supabase
       .from('follow')
       .select('*', { count: 'exact' })
-      .eq('following_user_id', Number(userId));
+      .eq('following_user_uuid', user.id);
 
     set({
       stats: {
@@ -80,7 +81,10 @@ export const useUserProfileStore = create<UserProfileState>((set) => ({
 
   updateProfileImage: async (file: File) => {
     const { user } = useUserProfileStore.getState();
-    if (!user) return;
+    if (!user || !user.id) {
+      console.error('updateProfileImage 실패: user 또는 user.id 없음', user);
+      return;
+    }
 
     const filePath = `profiles/${user.id}/${file.name}`;
 
@@ -108,7 +112,7 @@ export const useUserProfileStore = create<UserProfileState>((set) => ({
       return;
     }
 
-    await useUserProfileStore.getState().fetchUserStats(Number(user.id));
+    await get().fetchUser();
   },
 
   logout: async () => {
@@ -121,5 +125,22 @@ export const useUserProfileStore = create<UserProfileState>((set) => ({
       userInfo: null,
       stats: { posts: 0, photos: 0, following: 0, followers: 0 },
     });
+  },
+
+  updateNickname: async (nickname: string) => {
+    const { user } = get();
+    if (!user) return;
+
+    const { error } = await supabase
+      .from('userinfo')
+      .update({ nickname })
+      .eq('user_id', user.id);
+
+    if (!error) {
+      // 변경된 닉네임으로 상태 업데이트
+      set((state) => ({
+        userInfo: state.userInfo ? { ...state.userInfo, nickname } : null,
+      }));
+    }
   },
 }));
