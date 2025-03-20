@@ -37,7 +37,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko" className="overflow-y-scroll">
+    <html lang="ko" className="overflow-y-scroll max-w-[320px] mx-auto">
       <body>
         <Toast />
         {children}
