@@ -94,6 +94,7 @@ function SignUpForm() {
       />
     ) : (
       <DisabledButton
+        className="mt-10"
         label="관심지역 선택"
         onClick={() => toast.error('가입 정보를 입력하세요')}
       />

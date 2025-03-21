@@ -43,7 +43,7 @@ function RecommendPlaceClient({
             setSelectedTag={setSelectedTag}
           />
           <ul className="mb-20">
-            {filteredPosts?.map((post) => {
+            {filteredPosts!.map((post) => {
               return (
                 <PostCard
                   key={post.id}
