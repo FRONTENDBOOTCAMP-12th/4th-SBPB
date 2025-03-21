@@ -62,20 +62,11 @@ function PostCard({ tags, images, userId, postId, userInfo }: PostCardProps) {
     };
 
     fetchUser();
-  }, []);
+  }, [userId, supabase]);
 
   const handleFollowClick = async () => {
-    const res = await fetch('/api/follow', {
-      method: 'POST',
-      body: JSON.stringify({
-        action: 'check',
-        followingUserId: currentUser,
-        followUserId: targetUser,
-      }),
-    });
-    const isFollowed = await res.json();
-    setIsFollow(isFollowed.isFollowing);
     let bodyOption;
+
     if (!isFollow) {
       bodyOption = JSON.stringify({
         action: 'follow',
