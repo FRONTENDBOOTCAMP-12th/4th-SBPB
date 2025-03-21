@@ -23,7 +23,7 @@ function PostCard({ tags, images, userId, postId, userInfo }: PostCardProps) {
   const [isFollow, setIsFollow] = useState(false);
   const [currentUser, setCurrentUser] = useState<string>('');
   const [targetUser, setTargetUser] = useState<number | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const supabase = createClient();
 
@@ -65,43 +65,38 @@ function PostCard({ tags, images, userId, postId, userInfo }: PostCardProps) {
   }, [userId, supabase]);
 
   const handleFollowClick = async () => {
-    let bodyOption;
-
-    if (!isFollow) {
-      bodyOption = JSON.stringify({
-        action: 'follow',
-        followingUserId: currentUser,
-        followUserId: targetUser,
+    if (isLoading) return;
+    setIsLoading(true);
+    try {
+      await fetch('/api/follow', {
+        method: 'POST',
+        body: JSON.stringify({
+          action: isFollow ? 'unfollow' : 'follow',
+          followingUserId: currentUser,
+          followUserId: targetUser,
+        }),
       });
-      setIsFollow(true);
-    } else {
-      bodyOption = JSON.stringify({
-        action: 'unfollow',
-        followingUserId: currentUser,
-        followUserId: targetUser,
-      });
-      setIsFollow(false);
+      setIsFollow((prev) => !prev);
+    } catch (err) {
+      console.error(err);
+      return;
+    } finally {
+      setIsLoading(false);
     }
-    await fetch('/api/follow', {
-      method: 'POST',
-      body: bodyOption,
-    });
   };
 
   return (
     <article className="relative py-3.5 px-3 bg-gray-50">
-      {!isLoading && (
-        <button
-          onClick={handleFollowClick}
-          type="button"
-          className={tm(
-            'bg-content-primary text-white px-3.5 py-1.5 rounded-full text-xs self-center absolute top-[15px] right-[10px]',
-            { 'text-white bg-accent': isFollow }
-          )}
-        >
-          {isFollow ? '팔로잉' : '팔로우'}
-        </button>
-      )}
+      <button
+        onClick={handleFollowClick}
+        type="button"
+        className={tm(
+          'bg-content-primary text-white px-3.5 py-1.5 rounded-full text-xs self-center absolute top-[15px] right-[10px]',
+          { 'text-white bg-accent': isFollow }
+        )}
+      >
+        {isLoading ? '로딩 중..' : isFollow ? '팔로잉' : '팔로우'}
+      </button>
       <Link href={`/post-detail?postId=${postId}`}>
         <div className="flex gap-2">
           <Image
