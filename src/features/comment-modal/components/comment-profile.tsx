@@ -2,7 +2,16 @@
 import { tm } from '@/utils/tw-merge';
 import Image from 'next/image';
 
-function CommentProfile() {
+interface CommentProfileProps {
+  userId: string | null;
+  nickname?: string;
+  content?: string;
+}
+export default function CommentProfile({
+  userId,
+  nickname,
+  content,
+}: CommentProfileProps) {
   return (
     <li className={tm('min-h-[74px]')}>
       <figure className={tm('flex', 'gap-[10px]')}>
@@ -16,10 +25,8 @@ function CommentProfile() {
           />
         </picture>
         <figcaption>
-          <span>망나뇽</span>
-          <p className={tm('text-xs')}>
-            저런 음료가 있었나요? 제가 갔을 땐 없던데...
-          </p>
+          <span>{nickname}</span>
+          <p className={tm('text-xs')}>{content}</p>
           <button className={tm('text-xs', 'text-[#6B6B6B]')}>답글 1개</button>
         </figcaption>
       </figure>
@@ -36,7 +43,7 @@ function CommentProfile() {
               />
             </picture>
             <figcaption>
-              <span className={tm('text-xs')}>마자용</span>
+              <span className={tm('text-xs')}>{nickname}</span>
               <p className={tm('text-xs')}>악플 달지 마세요;;</p>
             </figcaption>
           </figure>
@@ -46,4 +53,4 @@ function CommentProfile() {
   );
 }
 
-export default CommentProfile;
+//export default CommentProfile;

@@ -6,10 +6,21 @@ import CommentProfile from './comment-profile';
 import NoComment from './no-comment';
 import LeaveComment from './leave-comment';
 
-function CommentModalPage() {
+interface CommentModalPageProps {
+  user: string | null;
+  postId: string | null;
+  nickname?: string;
+}
+
+export default function CommentModalPage({
+  user,
+  postId,
+  nickname,
+}: CommentModalPageProps) {
   //const supabase = createClient();
   //const [data, setData] = useState(null);
   //const [error, setError] = useState(null);
+  console.log('postId:', postId);
 
   useEffect(() => {
     async function insertComment() {
@@ -25,10 +36,10 @@ function CommentModalPage() {
 
   return (
     <>
-      <div className={tm('bg-[#313131]/70 h-screen')}>
+      <div className={tm('relative bg-[#313131]/70 h-screen')}>
         <div
           className={tm(
-            'fixed bottom-[0px] left-[0px] right-[0px] bg-white min-h-[75px] rounded-t-3xl'
+            'absolute bottom-[0px] left-[0px] right-[0px] bg-white min-h-[75px] rounded-t-3xl'
           )}
         >
           <div className={tm('text-center')}>
@@ -42,7 +53,7 @@ function CommentModalPage() {
               'px-[10px] py-[20px] border-solid border-[#BEC2C8] border-t-1'
             )}
           >
-            <CommentProfile />
+            <CommentProfile userId={user} nickname={nickname} />
           </ul>
           <NoComment />
 
@@ -59,4 +70,4 @@ function CommentModalPage() {
   );
 }
 
-export default CommentModalPage;
+//export default CommentModalPage;
