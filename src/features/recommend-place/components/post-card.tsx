@@ -105,8 +105,8 @@ function PostCard({ tags, images, userId, postId, userInfo }: PostCardProps) {
       <Link href={`/post-detail?postId=${postId}`}>
         <div className="flex gap-2">
           <Image
-            src={userInfo!.profile_path}
-            alt={userInfo!.nickname}
+            src={userInfo?.profile_path ?? '/default-profile.svg'}
+            alt={userInfo?.nickname ?? '사용자'}
             width={30}
             height={30}
             className="rounded-2xl w-[30px] h-[30px] object-cover"
@@ -133,7 +133,7 @@ function PostCard({ tags, images, userId, postId, userInfo }: PostCardProps) {
               className="w-[100px] h-[100px] object-cover"
               key={idx}
               src={image!}
-              alt={`${userInfo!.nickname}의 게시글 컨텐츠`}
+              alt={`${userInfo?.nickname ?? '사용자'}의 게시글 컨텐츠`}
               width={100}
               height={100}
             />
