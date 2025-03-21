@@ -13,7 +13,7 @@ export default function CommentModal() {
   interface SupabaseUser {
     id: string;
     email?: string;
-    // ...
+    nickname?: string;
   }
   const [postId, setPostId] = useState<string | null>(null);
   const [user, setUser] = useState<SupabaseUser | null>(null);
