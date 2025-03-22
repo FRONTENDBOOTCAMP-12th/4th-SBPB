@@ -38,8 +38,8 @@ export default function MyPostList() {
   return (
     <div className="post-list">
       <div
-        className="w-full h-[30vh] bg-cover bg-center mb-[38px]"
-        style={{ backgroundImage: `url('/cities/seoul.webp')` }}
+        className="w-full h-70 bg-cover bg-center mb-[38px]"
+        style={{ backgroundImage: `url('/cities/chungcheongbukdo.webp')` }}
       >
         <BackPageButton />
         <h1 className="border-solid border-b-[0.2px] text-2xl border-gray-400 mx-3 pt-8 mb-3 text-white">
