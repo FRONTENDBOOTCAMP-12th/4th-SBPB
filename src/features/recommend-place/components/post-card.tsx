@@ -125,12 +125,12 @@ function PostCard({ tags, images, userId, postId, userInfo }: PostCardProps) {
         >
           {images.map((image, idx) => (
             <Image
-              className="w-[100px] h-[100px] object-cover"
               key={idx}
               src={image!}
               alt={`${userInfo?.nickname ?? '사용자'}의 게시글 컨텐츠`}
               width={100}
               height={100}
+              style={{ width: '100px', height: '100px', objectFit: 'cover' }}
             />
           ))}
         </div>
