@@ -71,7 +71,7 @@ function ProfileModal({ isOpen, setIsOpen }: ProfileModalProps) {
           />
           <motion.dialog
             open
-            className="fixed w-full h-[80%] rounded-2xl top-1/2 left-1/2 -translate-1/2"
+            className="fixed w-[300px] h-[80%] rounded-2xl top-1/2 left-1/2 -translate-1/2"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
