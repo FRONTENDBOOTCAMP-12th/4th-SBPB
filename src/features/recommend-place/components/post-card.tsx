@@ -17,10 +17,18 @@ interface PostCardProps {
     nickname: string;
     profile_path: string;
   };
+  isFollowing: boolean;
 }
 
-function PostCard({ tags, images, userId, postId, userInfo }: PostCardProps) {
-  const [isFollow, setIsFollow] = useState(false);
+function PostCard({
+  tags,
+  images,
+  userId,
+  postId,
+  userInfo,
+  isFollowing,
+}: PostCardProps) {
+  const [isFollow, setIsFollow] = useState(isFollowing);
   const [currentUser, setCurrentUser] = useState<string>('');
   const [targetUser, setTargetUser] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -48,16 +56,6 @@ function PostCard({ tags, images, userId, postId, userInfo }: PostCardProps) {
       setCurrentUser(current);
       setTargetUser(target);
 
-      const resFollow = await fetch('/api/follow', {
-        method: 'POST',
-        body: JSON.stringify({
-          action: 'check',
-          followingUserId: current,
-          followUserId: target,
-        }),
-      });
-      const isFollowed = await resFollow.json();
-      setIsFollow(isFollowed.isFollowing);
       setIsLoading(false);
     };
 
@@ -92,7 +90,8 @@ function PostCard({ tags, images, userId, postId, userInfo }: PostCardProps) {
         type="button"
         className={tm(
           'bg-content-primary text-white px-3.5 py-1.5 rounded-full text-xs self-center absolute top-[15px] right-[10px]',
-          { 'text-white bg-accent': isFollow }
+          { 'text-white bg-accent': isFollow && !isLoading },
+          { 'text-white bg-gray-300': isLoading }
         )}
       >
         {isLoading ? '로딩 중..' : isFollow ? '팔로잉' : '팔로우'}
