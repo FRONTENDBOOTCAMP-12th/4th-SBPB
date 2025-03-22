@@ -1,6 +1,7 @@
 import RecommendPlaceClient from '@/features/recommend-place/components/recommend-place-client';
 import { createClient } from '@/utils/supabase/server';
 import { Metadata } from 'next';
+import { redirect } from 'next/navigation';
 
 export const metadata: Metadata = {
   title: '여행지 추천',
@@ -23,6 +24,10 @@ async function RecommendPlacePage() {
 
   const [{ data: tagData }, { data: posts }, { data: signInUser }] =
     await Promise.all([tagPromise, postPromise, userPromise]);
+
+  if (!signInUser.user) {
+    redirect('/signin');
+  }
 
   const tags = Array.from(
     new Set(
