@@ -28,6 +28,7 @@ function SignInForm() {
           'isAuth',
           JSON.stringify({
             accessToken: data.session?.access_token,
+            refreshToken: data.session?.refresh_token,
             email: data.user?.email,
           })
         );
@@ -95,7 +96,12 @@ function SignInForm() {
   return (
     <form
       className="flex flex-col gap-2.5 w-[15.625rem] mx-auto"
-      action={handleLogin}
+      // action={handleLogin}
+      onSubmit={(e) => {
+        e.preventDefault();
+        const formData = new FormData(e.currentTarget);
+        handleLogin(formData);
+      }}
     >
       <h2 className="text-white font-semibold text-[1.75rem] self-start">
         로그인

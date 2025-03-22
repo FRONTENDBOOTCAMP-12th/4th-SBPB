@@ -14,19 +14,35 @@ import { useUserProfileStore } from '@/store/user-profile-store';
 const loadFilesFromIndexedDB = () => {
   return new Promise<{ content: File }[]>((resolve, reject) => {
     const request = indexedDB.open('fileDatabase', 1);
+
+    // 데이터베이스 열기에 성공한 후
     request.onsuccess = (event) => {
       const db = (event.target as IDBRequest).result as IDBDatabase;
-      const transaction = db.transaction('files', 'readonly');
-      const store = transaction.objectStore('files');
-      const getAllRequest = store.getAll();
 
-      getAllRequest.onsuccess = () => {
-        resolve(getAllRequest.result as { content: File }[]);
-      };
+      // 'files' 오브젝트 스토어가 존재하는지 확인
+      if (db.objectStoreNames.contains('files')) {
+        const transaction = db.transaction('files', 'readonly');
+        const store = transaction.objectStore('files');
 
-      getAllRequest.onerror = () => {
-        reject('IndexedDB에서 파일을 불러오는 것에 실패했습니다.');
-      };
+        const getAllRequest = store.getAll(); // 모든 파일을 가져오기
+
+        // 파일을 성공적으로 불러오면
+        getAllRequest.onsuccess = () => {
+          const files = getAllRequest.result as { content: File }[];
+          if (files.length === 0) {
+            console.log('IndexedDB에 파일이 없습니다.');
+          }
+          resolve(files); // 파일이 있으면 반환
+        };
+
+        // 파일을 불러오는 중 오류가 발생하면
+        getAllRequest.onerror = () => {
+          reject('IndexedDB에서 파일을 불러오는 것에 실패했습니다.');
+        };
+      } else {
+        console.log('파일 스토어가 존재하지 않습니다.');
+        resolve([]);
+      }
     };
 
     request.onerror = () => {
@@ -120,7 +136,7 @@ export default function PostCreate() {
         <div
           className="h-full w-full bg-cover bg-center"
           style={{
-            backgroundImage: `url(${bgImage || '/sample.jpg'})`,
+            backgroundImage: `url(${bgImage})`,
           }}
         ></div>
         <div className="absolute inset-0 bg-black opacity-50"></div>
