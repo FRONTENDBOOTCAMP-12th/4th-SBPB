@@ -2,7 +2,6 @@ import './globals.css';
 import 'react-toastify/dist/ReactToastify.css';
 import Toast from '@/components/toast';
 import { Metadata } from 'next';
-import Script from 'next/script';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://sbpb4.netlify.app/'),
