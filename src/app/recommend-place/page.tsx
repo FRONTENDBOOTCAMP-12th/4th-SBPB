@@ -1,4 +1,5 @@
 import RecommendPlaceClient from '@/features/recommend-place/components/recommend-place-client';
+import { Tables } from '@/types/supabase';
 import { createClient } from '@/utils/supabase/server';
 import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
@@ -16,7 +17,17 @@ async function RecommendPlacePage() {
   // post 프로미스
   const postPromise = supabase
     .from('post')
-    .select('*')
+    .select(
+      `
+    *,
+    userinfo (
+      id,
+      nickname,
+      profile_path,
+      user_id
+    )
+  `
+    )
     .order('thumbs', { ascending: false });
 
   // user 프로미스
@@ -42,7 +53,7 @@ async function RecommendPlacePage() {
   // 유저 정보 가져오기
   const { data: userData, error: userError } = await supabase
     .from('userinfo')
-    .select('id, nickname, profile_path')
+    .select('id, nickname, profile_path, user_id')
     .in('id', userIds);
 
   if (userError) {
@@ -62,12 +73,47 @@ async function RecommendPlacePage() {
     return;
   }
 
+  // following 하고 있는 유저 갖고오기
+  const { data: followData, error } = await supabase
+    .from('follow')
+    .select('follow_user_uuid')
+    .eq('following_user_uuid', signInUser.user.id);
+
+  if (error) {
+    console.error(error);
+    return;
+  }
+  // 중복 제거
+  const following = Array.from(
+    new Set(followData?.map((data) => data.follow_user_uuid))
+  );
+
+  const postList = posts?.map((post) => {
+    const user = userMap.get(post.user_id);
+    return {
+      ...post,
+      user,
+      isFollowed: following.includes(post.userinfo.user_id),
+    };
+  });
+
   return (
     <RecommendPlaceClient
-      posts={posts}
+      posts={
+        postList as (Tables<'post'> & {
+          userinfo: {
+            id: number;
+            nickname: string;
+            profile_path: string;
+            user_id: string;
+          };
+          isFollowed: boolean;
+        })[]
+      }
       tags={tags}
       areas={areaData[0]}
       userMap={Object.fromEntries(userMap)}
+      userData={userData}
     />
   );
 }
