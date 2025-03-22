@@ -71,7 +71,7 @@ function ProfileModal({ isOpen, setIsOpen }: ProfileModalProps) {
           />
           <motion.dialog
             open
-            className="fixed w-[300px] h-[80%] rounded-2xl top-1/2 left-1/2 -translate-1/2"
+            className="fixed w-[300px] h-[500px] rounded-2xl top-1/2 left-1/2 -translate-1/2"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -99,11 +99,19 @@ function ProfileModal({ isOpen, setIsOpen }: ProfileModalProps) {
                   onChange={handleImageChange}
                 />
               </div>
-              {localImagePath && (
+              {localImagePath ? (
                 <Image
                   className="rounded-full mx-auto"
                   src={localImagePath}
                   alt="프로필 미리보기"
+                  width={240}
+                  height={240}
+                />
+              ) : (
+                <Image
+                  className="rounded-full mx-auto bg-gray-100"
+                  src="default-profile.svg"
+                  alt="기본 이미지"
                   width={240}
                   height={240}
                 />
