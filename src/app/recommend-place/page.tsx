@@ -9,36 +9,28 @@ export const metadata: Metadata = {
 async function RecommendPlacePage() {
   const supabase = await createClient();
 
-  // 태그 정보 가져오기
-  const { data: tagData, error: tagError } = await supabase
-    .from('post')
-    .select('tags')
-    .range(0, 49);
+  // tag 프로미스
+  const tagPromise = supabase.from('post').select('tags').range(0, 49);
 
-  if (tagError) {
-    console.error(tagError);
-    return;
-  }
-
-  const tagArr = tagData.flatMap((tag) => {
-    return tag.tags.split(',');
-  });
-
-  const tags = Array.from(new Set(tagArr));
-
-  // 게시글 정보 가져오기
-  const { data: posts, error: postError } = await supabase
+  // post 프로미스
+  const postPromise = supabase
     .from('post')
     .select('*')
-    .order('thumbs', { ascending: false })
-    .limit(20);
+    .order('thumbs', { ascending: false });
 
-  if (postError) {
-    console.error(
-      '게시글 정보를 갖고 오는 중 오류가 발생하였습니다 :',
-      postError
-    );
-  }
+  // user 프로미스
+  const userPromise = supabase.auth.getUser();
+
+  const [{ data: tagData }, { data: posts }, { data: signInUser }] =
+    await Promise.all([tagPromise, postPromise, userPromise]);
+
+  const tags = Array.from(
+    new Set(
+      tagData?.flatMap((tag) => {
+        return tag.tags.split(',');
+      })
+    )
+  );
 
   const userIds = [...new Set(posts?.map((post) => post.user_id))];
 
@@ -55,14 +47,10 @@ async function RecommendPlacePage() {
 
   const userMap = new Map(userData?.map((user) => [user.id, user]));
 
-  const { data: signInUser, error } = await supabase.auth.getUser();
-
-  if (error) return;
-
   const { data: areaData, error: areaError } = await supabase
     .from('userinfo')
     .select('interested_area')
-    .eq('user_id', signInUser.user.id);
+    .eq('user_id', signInUser?.user?.id);
 
   if (areaError) {
     console.error(areaError);
