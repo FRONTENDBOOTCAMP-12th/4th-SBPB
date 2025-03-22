@@ -9,13 +9,27 @@ import { useState } from 'react';
 import MyArea from './my-area';
 
 interface RecommendPlaceClientProps {
-  posts: Tables<'post'>[] | null;
+  posts: (Tables<'post'> & {
+    userinfo: {
+      id: number;
+      nickname: string;
+      profile_path: string;
+      user_id: string;
+    };
+    isFollowed: boolean;
+  })[];
   tags: string[];
   userMap: Record<
     number,
     { id: number; nickname: string; profile_path: string }
   >;
   areas: { interested_area: string[] };
+  userData: {
+    id: string;
+    nickname: string;
+    profile_path: string;
+    user_id: string;
+  }[];
 }
 
 function RecommendPlaceClient({
@@ -52,6 +66,7 @@ function RecommendPlaceClient({
                   userId={post.user_id}
                   postId={post.id}
                   userInfo={userMap[post.user_id!]}
+                  isFollowing={post.isFollowed}
                 />
               );
             })}
@@ -77,6 +92,7 @@ function RecommendPlaceClient({
                   userId={post.user_id}
                   postId={post.id}
                   userInfo={userMap[post.user_id!]}
+                  isFollowing={post.isFollowed}
                 />
               );
             })}

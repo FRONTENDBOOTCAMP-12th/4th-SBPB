@@ -1,6 +1,8 @@
 import RecommendPlaceClient from '@/features/recommend-place/components/recommend-place-client';
+import { Tables } from '@/types/supabase';
 import { createClient } from '@/utils/supabase/server';
 import { Metadata } from 'next';
+import { redirect } from 'next/navigation';
 
 export const metadata: Metadata = {
   title: '여행지 추천',
@@ -9,43 +11,49 @@ export const metadata: Metadata = {
 async function RecommendPlacePage() {
   const supabase = await createClient();
 
-  // 태그 정보 가져오기
-  const { data: tagData, error: tagError } = await supabase
-    .from('post')
-    .select('tags')
-    .range(0, 49);
+  // tag 프로미스
+  const tagPromise = supabase.from('post').select('tags').range(0, 49);
 
-  if (tagError) {
-    console.error(tagError);
-    return;
+  // post 프로미스
+  const postPromise = supabase
+    .from('post')
+    .select(
+      `
+    *,
+    userinfo (
+      id,
+      nickname,
+      profile_path,
+      user_id
+    )
+  `
+    )
+    .order('thumbs', { ascending: false });
+
+  // user 프로미스
+  const userPromise = supabase.auth.getUser();
+
+  const [{ data: tagData }, { data: posts }, { data: signInUser }] =
+    await Promise.all([tagPromise, postPromise, userPromise]);
+
+  if (!signInUser.user) {
+    redirect('/signin');
   }
 
-  const tagArr = tagData.flatMap((tag) => {
-    return tag.tags.split(',');
-  });
-
-  const tags = Array.from(new Set(tagArr));
-
-  // 게시글 정보 가져오기
-  const { data: posts, error: postError } = await supabase
-    .from('post')
-    .select('*')
-    .order('thumbs', { ascending: false })
-    .limit(20);
-
-  if (postError) {
-    console.error(
-      '게시글 정보를 갖고 오는 중 오류가 발생하였습니다 :',
-      postError
-    );
-  }
+  const tags = Array.from(
+    new Set(
+      tagData?.flatMap((tag) => {
+        return tag.tags.split(',');
+      })
+    )
+  );
 
   const userIds = [...new Set(posts?.map((post) => post.user_id))];
 
   // 유저 정보 가져오기
   const { data: userData, error: userError } = await supabase
     .from('userinfo')
-    .select('id, nickname, profile_path')
+    .select('id, nickname, profile_path, user_id')
     .in('id', userIds);
 
   if (userError) {
@@ -55,26 +63,57 @@ async function RecommendPlacePage() {
 
   const userMap = new Map(userData?.map((user) => [user.id, user]));
 
-  const { data: signInUser, error } = await supabase.auth.getUser();
-
-  if (error) return;
-
   const { data: areaData, error: areaError } = await supabase
     .from('userinfo')
     .select('interested_area')
-    .eq('user_id', signInUser.user.id);
+    .eq('user_id', signInUser?.user?.id);
 
   if (areaError) {
     console.error(areaError);
     return;
   }
 
+  // following 하고 있는 유저 갖고오기
+  const { data: followData, error } = await supabase
+    .from('follow')
+    .select('follow_user_uuid')
+    .eq('following_user_uuid', signInUser.user.id);
+
+  if (error) {
+    console.error(error);
+    return;
+  }
+  // 중복 제거
+  const following = Array.from(
+    new Set(followData?.map((data) => data.follow_user_uuid))
+  );
+
+  const postList = posts?.map((post) => {
+    const user = userMap.get(post.user_id);
+    return {
+      ...post,
+      user,
+      isFollowed: following.includes(post.userinfo.user_id),
+    };
+  });
+
   return (
     <RecommendPlaceClient
-      posts={posts}
+      posts={
+        postList as (Tables<'post'> & {
+          userinfo: {
+            id: number;
+            nickname: string;
+            profile_path: string;
+            user_id: string;
+          };
+          isFollowed: boolean;
+        })[]
+      }
       tags={tags}
       areas={areaData[0]}
       userMap={Object.fromEntries(userMap)}
+      userData={userData}
     />
   );
 }

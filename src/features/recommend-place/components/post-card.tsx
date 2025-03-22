@@ -17,13 +17,21 @@ interface PostCardProps {
     nickname: string;
     profile_path: string;
   };
+  isFollowing: boolean;
 }
 
-function PostCard({ tags, images, userId, postId, userInfo }: PostCardProps) {
-  const [isFollow, setIsFollow] = useState(false);
+function PostCard({
+  tags,
+  images,
+  userId,
+  postId,
+  userInfo,
+  isFollowing,
+}: PostCardProps) {
+  const [isFollow, setIsFollow] = useState(isFollowing);
   const [currentUser, setCurrentUser] = useState<string>('');
   const [targetUser, setTargetUser] = useState<number | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const supabase = createClient();
 
@@ -48,74 +56,51 @@ function PostCard({ tags, images, userId, postId, userInfo }: PostCardProps) {
       setCurrentUser(current);
       setTargetUser(target);
 
-      const resFollow = await fetch('/api/follow', {
-        method: 'POST',
-        body: JSON.stringify({
-          action: 'check',
-          followingUserId: current,
-          followUserId: target,
-        }),
-      });
-      const isFollowed = await resFollow.json();
-      setIsFollow(isFollowed.isFollowing);
       setIsLoading(false);
     };
 
     fetchUser();
-  }, []);
+  }, [userId, supabase]);
 
   const handleFollowClick = async () => {
-    const res = await fetch('/api/follow', {
-      method: 'POST',
-      body: JSON.stringify({
-        action: 'check',
-        followingUserId: currentUser,
-        followUserId: targetUser,
-      }),
-    });
-    const isFollowed = await res.json();
-    setIsFollow(isFollowed.isFollowing);
-    let bodyOption;
-    if (!isFollow) {
-      bodyOption = JSON.stringify({
-        action: 'follow',
-        followingUserId: currentUser,
-        followUserId: targetUser,
+    if (isLoading) return;
+    setIsLoading(true);
+    try {
+      await fetch('/api/follow', {
+        method: 'POST',
+        body: JSON.stringify({
+          action: isFollow ? 'unfollow' : 'follow',
+          followingUserId: currentUser,
+          followUserId: targetUser,
+        }),
       });
-      setIsFollow(true);
-    } else {
-      bodyOption = JSON.stringify({
-        action: 'unfollow',
-        followingUserId: currentUser,
-        followUserId: targetUser,
-      });
-      setIsFollow(false);
+      setIsFollow((prev) => !prev);
+    } catch (err) {
+      console.error(err);
+      return;
+    } finally {
+      setIsLoading(false);
     }
-    await fetch('/api/follow', {
-      method: 'POST',
-      body: bodyOption,
-    });
   };
 
   return (
     <article className="relative py-3.5 px-3 bg-gray-50">
-      {!isLoading && (
-        <button
-          onClick={handleFollowClick}
-          type="button"
-          className={tm(
-            'bg-content-primary text-white px-3.5 py-1.5 rounded-full text-xs self-center absolute top-[15px] right-[10px]',
-            { 'text-white bg-accent': isFollow }
-          )}
-        >
-          {isFollow ? '팔로잉' : '팔로우'}
-        </button>
-      )}
+      <button
+        onClick={handleFollowClick}
+        type="button"
+        className={tm(
+          'bg-content-primary text-white px-3.5 py-1.5 rounded-full text-xs self-center absolute top-[15px] right-[10px]',
+          { 'text-white bg-accent': isFollow && !isLoading },
+          { 'text-white bg-gray-300': isLoading }
+        )}
+      >
+        {isLoading ? '로딩 중..' : isFollow ? '팔로잉' : '팔로우'}
+      </button>
       <Link href={`/post-detail?postId=${postId}`}>
         <div className="flex gap-2">
           <Image
-            src={userInfo!.profile_path}
-            alt={userInfo!.nickname}
+            src={userInfo?.profile_path ?? '/default-profile.svg'}
+            alt={userInfo?.nickname ?? '사용자'}
             width={30}
             height={30}
             className="rounded-2xl w-[30px] h-[30px] object-cover"
@@ -139,12 +124,12 @@ function PostCard({ tags, images, userId, postId, userInfo }: PostCardProps) {
         >
           {images.map((image, idx) => (
             <Image
-              className="w-[100px] h-[100px] object-cover"
               key={idx}
               src={image!}
-              alt={`${userInfo!.nickname}의 게시글 컨텐츠`}
+              alt={`${userInfo?.nickname ?? '사용자'}의 게시글 컨텐츠`}
               width={100}
               height={100}
+              style={{ width: '100px', height: '100px', objectFit: 'cover' }}
             />
           ))}
         </div>
