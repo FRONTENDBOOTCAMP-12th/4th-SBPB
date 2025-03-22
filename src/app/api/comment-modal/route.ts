@@ -3,10 +3,11 @@ import { createClient } from '@/utils/supabase/client';
 
 export async function POST(req: NextRequest) {
   try {
-    const { content, parent_comment_id, post_id, user_id } = await req.json();
-    console.log(parent_comment_id);
+    //const { content, parent_comment_id, post_id, user_id } = await req.json();
+    //console.log(parent_comment_id);
     const body = await req.json();
-    console.log('body:', body);
+    //console.log('body:', body);
+    const { content, parent_comment_id, post_id, user_id } = body;
 
     if (!post_id) {
       return NextResponse.json(

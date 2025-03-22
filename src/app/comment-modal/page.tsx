@@ -59,7 +59,7 @@ export default function CommentModal() {
   return (
     <>
       <CommentModalPage
-        user={user.id}
+        userId={user.id}
         nickname={user.nickname}
         postId={postId}
       />

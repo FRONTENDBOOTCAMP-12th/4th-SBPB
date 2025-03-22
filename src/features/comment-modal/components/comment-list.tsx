@@ -3,14 +3,16 @@ import { tm } from '@/utils/tw-merge';
 import Image from 'next/image';
 
 interface CommentProfileProps {
-  userId: string | null;
-  nickname?: string;
+  //userId: string | null;
+  //nickname: string;
   content?: string;
+  //postId: string | null;
 }
 export default function CommentProfile({
-  userId,
-  nickname,
+  //userId,
+  //nickname,
   content,
+  //postId,
 }: CommentProfileProps) {
   return (
     <li className={tm('min-h-[74px]')}>
@@ -25,7 +27,7 @@ export default function CommentProfile({
           />
         </picture>
         <figcaption>
-          <span>{nickname}</span>
+          {/* <span>{nickname}</span> */}
           <p className={tm('text-xs')}>{content}</p>
           <button className={tm('text-xs', 'text-[#6B6B6B]')}>답글 1개</button>
         </figcaption>
@@ -43,7 +45,7 @@ export default function CommentProfile({
               />
             </picture>
             <figcaption>
-              <span className={tm('text-xs')}>{nickname}</span>
+              {/* <span className={tm('text-xs')}>{nickname}</span> */}
               <p className={tm('text-xs')}>악플 달지 마세요;;</p>
             </figcaption>
           </figure>

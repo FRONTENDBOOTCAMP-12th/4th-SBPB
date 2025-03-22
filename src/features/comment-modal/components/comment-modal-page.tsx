@@ -2,25 +2,27 @@
 import { tm } from '@/utils/tw-merge';
 import { useEffect } from 'react';
 //import { createClient } from '@/utils/supabase/client';
-import CommentProfile from './comment-profile';
+import CommentProfile from './comment-list';
 import NoComment from './no-comment';
 import LeaveComment from './leave-comment';
 
 interface CommentModalPageProps {
-  user: string | null;
+  userId: string | null;
   postId: string | null;
   nickname?: string;
 }
 
-export default function CommentModalPage({
-  user,
-  postId,
-  nickname,
-}: CommentModalPageProps) {
+export default function CommentModalPage(
+  {
+    //userId,
+    //postId,
+    //nickname,
+  }: CommentModalPageProps
+) {
   //const supabase = createClient();
   //const [data, setData] = useState(null);
   //const [error, setError] = useState(null);
-  console.log('postId:', postId);
+  //console.log('postId:', postId);
 
   useEffect(() => {
     async function insertComment() {
@@ -53,7 +55,11 @@ export default function CommentModalPage({
               'px-[10px] py-[20px] border-solid border-[#BEC2C8] border-t-1'
             )}
           >
-            <CommentProfile userId={user} nickname={nickname} />
+            <CommentProfile
+            //userId={userId ?? null}
+            //nickname={nickname}
+            //postId={postId ?? null}
+            />
           </ul>
           <NoComment />
 
