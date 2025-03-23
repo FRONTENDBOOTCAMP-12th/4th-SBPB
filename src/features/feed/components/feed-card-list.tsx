@@ -18,7 +18,9 @@ import FeedSortDropdown from './feed-sort-dropdown';
 
 export default function FeedCardList() {
   const { sortType } = useSortStore();
-  const { user, fetchUser, refreshFeedFlag } = useUserProfileStore();
+  const user = useUserProfileStore((state) => state.user);
+  const fetchUser = useUserProfileStore((state) => state.fetchUser);
+  const refreshFeedFlag = useUserProfileStore((state) => state.refreshFeedFlag);
   const currentUserId = user?.id || '';
 
   const [posts, setPosts] = useState<FeedCardProps[]>([]);
@@ -28,7 +30,7 @@ export default function FeedCardList() {
 
   useEffect(() => {
     fetchUser();
-  }, [fetchUser]);
+  }, []);
 
   useEffect(() => {
     const fetchPosts = async () => {
