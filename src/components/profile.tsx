@@ -21,6 +21,7 @@ function Profile() {
   const [nicknameInput, setNicknameInput] = useState<string>(
     userInfo?.nickname || ''
   );
+  const [uploading, setUploading] = useState<boolean>(false);
 
   const handleNicknameSave = async () => {
     if (nicknameInput.trim() && nicknameInput !== userInfo?.nickname) {
@@ -41,16 +42,14 @@ function Profile() {
     fetchUser();
   }, []);
 
-  const handleFileButtonClick = () => {
-    fileInputRef.current?.click();
-  };
-
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      await updateProfileImage(file);
-      e.target.value = '';
-    }
+    if (!file || uploading) return;
+
+    setUploading(true);
+    await updateProfileImage(file);
+    setUploading(false);
+    e.target.value = '';
   };
 
   if (!user) {
@@ -120,7 +119,6 @@ function Profile() {
 				bg-white rounded-full p-1.5 cursor-pointer
 				hover:bg-accent duration-300 absolute -bottom-2 -right-1
 				`}
-          onClick={handleFileButtonClick}
         >
           <Image
             src="/pen.svg"
