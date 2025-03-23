@@ -39,7 +39,7 @@ function Profile() {
 
   useEffect(() => {
     fetchUser();
-  }, [fetchUser]);
+  }, []);
 
   const handleFileButtonClick = () => {
     fileInputRef.current?.click();

@@ -8,7 +8,7 @@ import { createClient } from '@/utils/supabase/client';
 import { toast } from 'react-toastify';
 
 export default function FeedLikeBtn({ postId }: FeedLikeBtnProps) {
-  const { likedPosts, likeCounts, toggleLike, setLikes } = useLikeStore();
+  const { likedPosts, likeCounts, setLikes } = useLikeStore();
   const [, setLoading] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null); // 로그인 여부 상태
   const loadingRef = useRef(false);
@@ -65,9 +65,8 @@ export default function FeedLikeBtn({ postId }: FeedLikeBtnProps) {
     loadingRef.current = true;
     setLoading(true);
 
-    const newCount = likedPosts[postId]
-      ? likeCounts[postId] - 1
-      : likeCounts[postId] + 1;
+    const isLiked = likedPosts[postId] ?? false;
+    const newCount = isLiked ? likeCounts[postId] - 1 : likeCounts[postId] + 1;
 
     const res = await fetch('/api/feed-like-btn', {
       method: 'PATCH',
@@ -79,7 +78,12 @@ export default function FeedLikeBtn({ postId }: FeedLikeBtnProps) {
     if (!res.ok) {
       console.error('좋아요 업데이트 오류:', data.error);
     } else {
-      toggleLike(postId, newCount);
+      // 여기에서 setLikes만 사용하여 정확히 반영
+      setLikes(postId, newCount);
+      // likedPosts 업데이트
+      useLikeStore.setState((state) => ({
+        likedPosts: { ...state.likedPosts, [postId]: !isLiked },
+      }));
     }
 
     loadingRef.current = false;
