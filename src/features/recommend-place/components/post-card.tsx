@@ -6,6 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import TagItem from './tag-item';
+import React from 'react';
 
 interface PostCardProps {
   tags: string[] | undefined;
@@ -128,8 +129,9 @@ function PostCard({
               src={image!}
               alt={`${userInfo?.nickname ?? '사용자'}의 게시글 컨텐츠`}
               width={100}
-              height={100}
-              style={{ width: '100px', height: '100px', objectFit: 'cover' }}
+              height={90}
+              style={{ width: '100px', height: '90px' }}
+              priority={idx === 0}
             />
           ))}
         </div>
@@ -137,4 +139,4 @@ function PostCard({
     </article>
   );
 }
-export default PostCard;
+export default React.memo(PostCard);
