@@ -5,7 +5,7 @@ import PostCard from '@/features/recommend-place/components/post-card';
 import TagFilter from '@/features/recommend-place/components/tag-filter';
 import ThemeBar from '@/features/recommend-place/components/theme-bar';
 import { Tables } from '@/types/supabase';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import MyArea from './my-area';
 
 interface RecommendPlaceClientProps {
@@ -41,10 +41,11 @@ function RecommendPlaceClient({
   const [selectedTag, setSelectedTag] = useState<string>('전체보기');
   const [theme, setTheme] = useState<string>('전국 여행지');
 
-  const filteredPosts =
-    selectedTag !== '전체보기'
+  const filteredPosts = useMemo(() => {
+    return selectedTag !== '전체보기'
       ? posts?.filter((post) => post.tags?.includes(selectedTag))
       : posts;
+  }, [selectedTag, posts]);
 
   return (
     <>

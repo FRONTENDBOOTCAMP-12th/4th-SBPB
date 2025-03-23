@@ -12,7 +12,7 @@ async function RecommendPlacePage() {
   const supabase = await createClient();
 
   // tag 프로미스
-  const tagPromise = supabase.from('post').select('tags').range(0, 49);
+  const tagPromise = supabase.from('post').select('tags').range(0, 19);
 
   // post 프로미스
   const postPromise = supabase
