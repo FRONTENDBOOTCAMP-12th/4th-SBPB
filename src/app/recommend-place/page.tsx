@@ -1,6 +1,7 @@
 import RecommendPlaceClient from '@/features/recommend-place/components/recommend-place-client';
 import { Tables } from '@/types/supabase';
 import { createClient } from '@/utils/supabase/server';
+import { shuffle } from 'lodash-es';
 import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 
@@ -40,13 +41,15 @@ async function RecommendPlacePage() {
     redirect('/signin');
   }
 
-  const tags = Array.from(
-    new Set(
-      tagData?.flatMap((tag) => {
-        return tag.tags.split(',');
-      })
+  const tags = shuffle(
+    Array.from(
+      new Set(
+        tagData?.flatMap((tag) => {
+          return tag.tags.split(',');
+        })
+      )
     )
-  );
+  ).slice(0, 4);
 
   const userIds = [...new Set(posts?.map((post) => post.user_id))];
 

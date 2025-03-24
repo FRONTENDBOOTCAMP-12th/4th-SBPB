@@ -45,58 +45,35 @@ function SignInForm() {
 
   const handleKaKaoLogin = async () => {
     try {
-      let options;
-      const user = await supabase.auth.getUser();
-
-      if (user.data.user) {
-        options = {
-          redirectTo: `${window.location.origin}/feed`,
-        };
-      } else {
-        options = {
-          redirectTo: `${window.location.origin}/signup/select-area`,
-        };
-      }
-
-      const { error } = await supabase.auth.signInWithOAuth({
+      await supabase.auth.signInWithOAuth({
         provider: 'kakao',
-        options,
+        options: {
+          redirectTo: `${window.location.origin}/feed`,
+        },
       });
-      if (error) throw new Error('계정이 없습니다.');
     } catch (err) {
-      toast.info(err as string);
+      toast.error('카카오 로그인 실패');
+      console.error(err);
     }
   };
 
   const handleGoogleLogin = async () => {
     try {
-      let options;
-      const user = await supabase.auth.getUser();
-
-      if (user.data.user) {
-        options = {
-          redirectTo: `${window.location.origin}/feed`,
-        };
-      } else {
-        options = {
-          redirectTo: `${window.location.origin}/signup/select-area`,
-        };
-      }
-
-      const { error } = await supabase.auth.signInWithOAuth({
+      await supabase.auth.signInWithOAuth({
         provider: 'google',
-        options,
+        options: {
+          redirectTo: `${window.location.origin}/feed`,
+        },
       });
-      if (error) throw new Error('계정이 없습니다.');
     } catch (err) {
-      toast.info(err as string);
+      toast.error('카카오 로그인 실패');
+      console.error(err);
     }
   };
 
   return (
     <form
       className="flex flex-col gap-2.5 w-[15.625rem] mx-auto"
-      // action={handleLogin}
       onSubmit={(e) => {
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
