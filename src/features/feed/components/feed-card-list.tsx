@@ -13,6 +13,8 @@ import {
   PostType,
 } from '@/features/feed/types/feed-card-props';
 import FeedSortDropdown from './feed-sort-dropdown';
+import { createClient } from '@/utils/supabase/client';
+import { toast } from 'react-toastify';
 
 // feed-card-list.tsx : 데이터 불러오기, 게시글 정렬
 
@@ -27,6 +29,25 @@ export default function FeedCardList() {
   const [expandedPostId, setExpandedPostId] = useState<string | null>(null);
   const [selectedTag, setSelectedTag] = useState('all');
   const router = useRouter();
+  const supabase = createClient();
+
+  useEffect(() => {
+    const checkUser = async () => {
+      const {
+        data: { user },
+        error,
+      } = await supabase.auth.getUser();
+
+      if (error || !user) {
+        toast.error('회원가입이 필요합니다');
+        router.push('/signin');
+      } else {
+        console.log('유저 정보:', user);
+      }
+    };
+
+    checkUser();
+  }, []);
 
   useEffect(() => {
     fetchUser();

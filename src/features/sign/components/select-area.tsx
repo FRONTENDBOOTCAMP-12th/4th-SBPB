@@ -18,13 +18,21 @@ function SelectArea({ areaData }: { areaData: AreaType[] }) {
   const router = useRouter();
 
   useEffect(() => {
+    // 이메일로 가입했을 시 바로 종료되도록
+    if (type === 'email') return;
     try {
-      // 이메일로 가입했을 시 바로 종료되도록
-      if (type === 'email') return;
-
       async function saveUser() {
-        const data = await fetch('/api/get-user');
-        const user = await data.json();
+        const { error: sessionError } = await supabase.auth.getSession();
+
+        if (sessionError) {
+          throw new Error('세션 에러가 발생하였습니다.');
+        }
+
+        const { data: user, error: userError } = await supabase.auth.getUser();
+
+        if (userError) {
+          throw new Error('유저 에러가 발생하였습니다.');
+        }
 
         if (!user.user) throw new Error('로그인한 유저 정보가 없습니다.');
 
@@ -32,7 +40,7 @@ function SelectArea({ areaData }: { areaData: AreaType[] }) {
           type: 'kakao' as const,
           userId: user?.user.id,
           userEmail: user?.user.email,
-          userNickname: user?.user.email.split('@').at(0),
+          userNickname: user.user.email?.split('@').at(0),
         };
 
         saveAuth(userData);
@@ -42,7 +50,7 @@ function SelectArea({ areaData }: { areaData: AreaType[] }) {
       if ((err as string).includes('duplicate')) {
         toast.error('중복된 닉네임입니다.');
       }
-      console.error(err);
+      console.error('에러 발생 :', (err as Error).message);
     }
   }, []);
 
