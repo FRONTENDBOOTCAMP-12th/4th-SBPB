@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 import TagInput from './tag-input';
 import { usePlacesStore } from '@/store/user-place-store';
 import { useUserProfileStore } from '@/store/user-profile-store';
+import { debounce } from 'lodash-es';
 
 // IndexedDB에서 파일을 불러오는 함수
 const loadFilesFromIndexedDB = () => {
@@ -51,6 +52,38 @@ const loadFilesFromIndexedDB = () => {
   });
 };
 
+// IndexedDB에서 모든 파일 삭제하는 함수
+const deleteFilesFromIndexedDB = () => {
+  return new Promise<void>((resolve, reject) => {
+    const request = indexedDB.open('fileDatabase', 1);
+
+    request.onsuccess = (event) => {
+      const db = (event.target as IDBRequest).result as IDBDatabase;
+
+      if (db.objectStoreNames.contains('files')) {
+        const transaction = db.transaction('files', 'readwrite');
+        const store = transaction.objectStore('files');
+
+        const clearRequest = store.clear(); // 모든 파일을 삭제
+
+        clearRequest.onsuccess = () => {
+          resolve(); // 삭제 완료
+        };
+
+        clearRequest.onerror = () => {
+          reject('파일을 삭제하는데 실패했습니다.');
+        };
+      } else {
+        resolve(); // 파일 스토어가 없으면 그냥 성공
+      }
+    };
+
+    request.onerror = () => {
+      reject('IndexedDB를 open 하는 것에 실패했습니다.');
+    };
+  });
+};
+
 export default function PostCreate() {
   const { userInfo, fetchUser } = useUserProfileStore();
 
@@ -58,7 +91,7 @@ export default function PostCreate() {
   const [tags, setTags] = useState<string[]>([]);
   const [description, setDescription] = useState('');
   const [bgImage, setBgImage] = useState<string | null>(null);
-  const { places } = usePlacesStore(); // zustand에서 places 상태 가져오기
+  const { places, deleteAllPlaces } = usePlacesStore(); // zustand에서 places 상태 가져오기
   const router = useRouter();
   const userId = userInfo?.id ? userInfo.id : 0;
 
@@ -84,7 +117,7 @@ export default function PostCreate() {
     fetchFilesAndSetBgImage();
   }, [fetchUser]);
 
-  const handleUpload = async () => {
+  const handleUpload = debounce(async () => {
     if (!bgImage) {
       alert('배경 이미지가 없습니다!!');
       return;
@@ -121,6 +154,13 @@ export default function PostCreate() {
 
       if (result.postId) {
         alert('게시물이 성공적으로 업로드되었습니다!');
+
+        // IndexedDB에서 파일 삭제
+        await deleteFilesFromIndexedDB();
+
+        // zustand 상태에서 places 목록 초기화
+        deleteAllPlaces();
+
         router.push(`/post-detail?postId=${result.postId}`);
       } else {
         alert('게시물 업로드에 실패했습니다.');
@@ -128,7 +168,7 @@ export default function PostCreate() {
     } catch (error) {
       console.error('파일 업로드 중 에러:', error);
     }
-  };
+  }, 1500);
 
   return (
     <div className="h-screen flex flex-col pt-16 bg-primary">
