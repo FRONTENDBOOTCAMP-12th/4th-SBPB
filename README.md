@@ -40,7 +40,7 @@
 
 저희 4조의 "사방팔방" 서비스는 **여행**이라는 공통 관심사에 중점을 두어<br /> 실시간으로 소통하며 유저가 원하는 정보를 손쉽게 탐색할 수 있는 **여행 SNS**입니다 😎
 
-<img src="public/logo.svg" width="400" height="300">
+![Image](https://github.com/user-attachments/assets/80aa4c6c-a9f5-4806-a72b-32d6cd36311b)
 
 [📌 배포사이트](https://sbpb4.netlify.app/)
 
