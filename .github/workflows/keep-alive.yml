@@ -1,0 +1,13 @@
+name: Keep Supabase Alive
+
+on:
+  schedule:
+    - cron: "0 0 */5 * *" # 5일마다 00:00 UTC에 실행
+  workflow_dispatch:        # 수동 실행도 가능
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call supabase API to prevent pause
+        run: curl -X GET "https://sbpb4.netlify.app/api/feed-card-list?sortType=latest&tag=all"
